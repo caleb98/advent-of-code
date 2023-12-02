@@ -1,0 +1,11 @@
+plugins {
+    id 'net.calebscode.aoc.java-application-conventions'
+}
+
+dependencies {
+    implementation project(':aoc-lib')
+}
+
+application {
+    mainClass = 'net.calebscode.aoc.AOC2023'
+}
