@@ -95,9 +95,6 @@ public class AOC2023_Day8 extends Solution<Long> {
 													.mapToObj(this::getPrimeFactors)
 													.toList();
 
-		// Map<Integer, Integer> primeFactorsForNum1 = getPrimeFactors(number1);
-		// Map<Integer, Integer> primeFactorsForNum2 = getPrimeFactors(number2);
-
 		Set<Long> primeFactorsUnionSet = new HashSet<>();
 		for (var factors : primeFactors) {
 			primeFactorsUnionSet.addAll(factors.keySet());
