@@ -29,4 +29,14 @@ public class QuestionInput {
 		return Collections.unmodifiableList(lines);
 	}
 
+	public char[][] asCharArray() {
+		char[][] chars = new char[lines.get(0).length()][lines.size()];
+
+		for (int i = 0; i < lines.size(); i++) {
+			chars[i] = lines.get(i).toCharArray();
+		}
+
+		return chars;
+	}
+
 }
