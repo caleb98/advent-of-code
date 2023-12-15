@@ -64,7 +64,6 @@ public class AOC2023_Day12 extends Solution<Long> {
 		}
 
 		// Some quick checks to prune unnecessary branches
-		// (holy cow this actually speeds things up a TON!)
 		int brokenSum = sum(broken);
 		int brokenInLayout = layout.replaceAll("[\\.\\?]", "").length();
 
