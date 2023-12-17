@@ -14,49 +14,57 @@ import java.util.function.Predicate;
 
 import net.calebscode.aoc.QuestionInput;
 import net.calebscode.aoc.Solution;
+import net.calebscode.aoc.pathfinding.DijkstraPathfinder;
 import net.calebscode.aoc.util.Point;
 import net.calebscode.aoc.util.Triple;
 
 public class AOC2023_Day17 extends Solution<Integer> {
 
-	private QuestionInput input;
+	private final QuestionInput input;
+	private final int[][] heatLosses;
+	private final int mapWidth;
+	private final int mapHeight;
+	private final Point endpoint;
+	private final List<Triple<Point, Direction, Integer>> startNodes;
 
 	public AOC2023_Day17() {
 		input = new QuestionInput("/inputs/day17.txt");
+		heatLosses = asInts(input.asCharArray());
+		mapWidth = heatLosses[0].length;
+		mapHeight = heatLosses.length;
+		endpoint = new Point(mapWidth - 1, mapHeight -  1);
+
+		startNodes = List.of(
+			Triple.of(new Point(0, 0), Direction.RIGHT, 0),
+			Triple.of(new Point(0, 0), Direction.DOWN, 0)
+		);
 	}
 
 	@Override
 	public Integer solveFirst() {
-		var layout = input.asCharArray();
-		var heatLosses = asInts(layout);
-
-		var width = heatLosses[0].length;
-		var height = heatLosses.length;
-
-		Point end = new Point(width - 1, height - 1);
-
-		return shortestPath(
-			heatLosses,
-			node -> getAdjacentRegular(width, height, node),
-			node -> end.equals(node.a)
+		var pathfinder = new DijkstraPathfinder<Triple<Point, Direction, Integer>>(
+			this::getAdjacentRegularCrucible,
+			this::getTransitionCost,
+			this::isTerminalRegularCrucible
 		);
+
+		// Run the pathfinding
+		var path = pathfinder.pathfind(startNodes);
+		return path.getTotalCost();
 	}
 
 	@Override
 	public Integer solveSecond() {
-		var layout = input.asCharArray();
-		var heatLosses = asInts(layout);
-
-		var width = heatLosses[0].length;
-		var height = heatLosses.length;
-
-		Point end = new Point(width - 1, height - 1);
-
-		return shortestPath(
-			heatLosses,
-			node -> getAdjacentUltra(width, height, node),
-			node -> end.equals(node.a) && node.c >= 4
+		// Same process as before, but use pathfinder with updated adjacency
+		// function and terminal node filter.
+		var pathfinder = new DijkstraPathfinder<Triple<Point, Direction, Integer>>(
+			this::getAdjacentUltraCrucible,
+			this::getTransitionCost,
+			this::isTerminalUltraCrucible
 		);
+
+		var path = pathfinder.pathfind(startNodes);
+		return path.getTotalCost();
 	}
 
 	private int[][] asInts(char[][] chars) {
@@ -72,89 +80,11 @@ public class AOC2023_Day17 extends Solution<Integer> {
 		return ints;
 	}
 
-	private int shortestPath(
-		int[][] heatLosses,
-		Function<Triple<Point, Direction, Integer>, List<Triple<Point, Direction, Integer>>> adjacencyFunc,
-		Predicate<Triple<Point, Direction, Integer>> isTerminal
-	) {
-		var startNodeA = Triple.of(new Point(1, 0), Direction.RIGHT, 1);
-		var startNodeB = Triple.of(new Point(0, 1), Direction.DOWN, 1);
-
-		HashMap<Triple<Point, Direction, Integer>, Integer> totalLosses = new HashMap<>();
-		totalLosses.put(startNodeA, heatLosses[0][1]);
-		totalLosses.put(startNodeB, heatLosses[1][0]);
-
-		Comparator<Triple<Point, Direction, Integer>> sorter = (a, b) -> {
-			var aDist = totalLosses.getOrDefault(a, Integer.MAX_VALUE);
-			var bDist = totalLosses.getOrDefault(b, Integer.MAX_VALUE);
-			var distCompare = Integer.compare(aDist, bDist);
-
-			if (distCompare != 0) return distCompare;
-
-			return Integer.compare(a.hashCode(), b.hashCode());
-		};
-
-		HashMap<Triple<Point, Direction, Integer>, Triple<Point, Direction, Integer>> paths = new HashMap<>();
-		Set<Triple<Point, Direction, Integer>> visited = new HashSet<>();
-		SortedSet<Triple<Point, Direction, Integer>> unvisited = new TreeSet<>(sorter);
-		unvisited.add(startNodeA);
-		unvisited.add(startNodeB);
-
-		Triple<Point, Direction, Integer> current;
-		while (!unvisited.isEmpty()) {
-			current = unvisited.removeFirst();
-			int currentLoss = totalLosses.get(current);
-
-			var adjacent = adjacencyFunc.apply(current).stream()
-								.filter(n -> !visited.contains(n))
-								.toList();
-
-			for (var node : adjacent) {
-				int cellLoss = heatLosses[node.a.getY()][node.a.getX()];
-				int totalLoss = currentLoss + cellLoss;
-
-				int tentativeLoss = totalLosses.getOrDefault(node, Integer.MAX_VALUE);
-
-				if (totalLoss < tentativeLoss) {
-					totalLosses.put(node, totalLoss);
-					paths.put(node, current);
-				}
-			}
-
-			unvisited.removeAll(adjacent);
-			unvisited.addAll(adjacent);
-			visited.add(current);
-		}
-
-		var endpoints = visited.stream()
-						.filter(node -> isTerminal.test(node))
-						.toList();
-
-		Triple<Point, Direction, Integer> shortestEnd = null;
-		int shortest = Integer.MAX_VALUE;
-		for (var endpoint : endpoints) {
-			int distance = totalLosses.get(endpoint);
-			if (shortest > distance) {
-				shortest = distance;
-				shortestEnd = endpoint;
-			}
-		}
-
-		var order = new LinkedList<String>();
-		var path = shortestEnd;
-		while (totalLosses.get(path) != null) {
-			order.addFirst(path.b.toString());
-			path = paths.get(path);
-		}
-
-		for (var dir : order) {
-			System.out.println(dir);
-		}
-
-		return shortest;
+	private int getTransitionCost(Triple<Point, Direction, Integer> from, Triple<Point, Direction, Integer> to) {
+		return heatLosses[to.a.getY()][to.a.getX()];
 	}
 
-	private List<Triple<Point, Direction, Integer>> getAdjacentRegular(int width, int height, Triple<Point, Direction, Integer> node) {
+	private List<Triple<Point, Direction, Integer>> getAdjacentRegularCrucible(Triple<Point, Direction, Integer> node) {
 		var adjacent = new ArrayList<>(switch (node.b) {
 			case UP, DOWN -> {
 				Triple<Point, Direction, Integer> left = Triple.of(node.a.translate(-1, 0), Direction.LEFT, 1);
@@ -181,12 +111,16 @@ public class AOC2023_Day17 extends Solution<Integer> {
 			.filter(n ->
 				n.a.getX() >= 0 &&
 				n.a.getY() >= 0 &&
-				n.a.getX() < width &&
-				n.a.getY() < height)
+				n.a.getX() < mapWidth &&
+				n.a.getY() < mapHeight)
 			.toList();
 	}
 
-	private List<Triple<Point, Direction, Integer>> getAdjacentUltra(int width, int height, Triple<Point, Direction, Integer> node) {
+	private boolean isTerminalRegularCrucible(Triple<Point, Direction, Integer> node) {
+		return node.a.equals(endpoint);
+	}
+
+	private List<Triple<Point, Direction, Integer>> getAdjacentUltraCrucible(Triple<Point, Direction, Integer> node) {
 		List<Triple<Point, Direction, Integer>> adjacent;
 
 		// Ultra crucible must go at least four spaces. If we're not there,
@@ -229,9 +163,13 @@ public class AOC2023_Day17 extends Solution<Integer> {
 			.filter(n ->
 				n.a.getX() >= 0 &&
 				n.a.getY() >= 0 &&
-				n.a.getX() < width &&
-				n.a.getY() < height)
+				n.a.getX() < mapWidth &&
+				n.a.getY() < mapHeight)
 			.toList();
+	}
+
+	private boolean isTerminalUltraCrucible(Triple<Point, Direction, Integer> node) {
+		return node.a.equals(endpoint) && node.c >= 4;
 	}
 
 	private static enum Direction {

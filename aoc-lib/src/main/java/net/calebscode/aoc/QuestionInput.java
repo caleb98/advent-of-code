@@ -30,7 +30,7 @@ public class QuestionInput {
 	}
 
 	public char[][] asCharArray() {
-		char[][] chars = new char[lines.get(0).length()][lines.size()];
+		char[][] chars = new char[lines.size()][];
 
 		for (int i = 0; i < lines.size(); i++) {
 			chars[i] = lines.get(i).toCharArray();

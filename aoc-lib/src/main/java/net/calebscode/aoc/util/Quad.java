@@ -35,7 +35,7 @@ public class Quad<A, B, C, D> {
 			&& Objects.equals(d, other.d);
 	}
 
-	public <W, X, Y, Z> Quad<W, X, Y, Z> of(W w, X x, Y y, Z z) {
+	public static <W, X, Y, Z> Quad<W, X, Y, Z> of(W w, X x, Y y, Z z) {
 		return new Quad<>(w, x, y, z);
 	}
 
