@@ -199,7 +199,7 @@ public class AOC2023_Day3 extends Solution<Integer> {
 		return c == '*';
 	}
 
-	static class Point {
+	private static class Point {
 		int row;
 		int col;
 
