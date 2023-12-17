@@ -8,12 +8,12 @@ public class AOC2023 {
 		var solution = new AOC2023_Day17();
 		System.out.printf(
 			"First Solution: %d\n",
-			solution.solveFirst()
+			solution.timeFirst()
 		);
 
 		System.out.printf(
 			"Second Solution: %d\n",
-			solution.solveSecond()
+			solution.timeSecond()
 		);
 
     }
