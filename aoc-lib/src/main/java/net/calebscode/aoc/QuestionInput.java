@@ -39,4 +39,19 @@ public class QuestionInput {
 		return chars;
 	}
 
+	public int[][] asIntArray() {
+		int[][] ints = new int[lines.size()][];
+
+		for (int row = 0; row < lines.size(); row++) {
+			var line = lines.get(row);
+			ints[row] = new int[line.length()];
+
+			for (int col = 0; col < line.length(); col++) {
+				ints[row][col] = line.charAt(col) - '0';
+			}
+		}
+
+		return ints;
+	}
+
 }

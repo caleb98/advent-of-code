@@ -1,16 +1,7 @@
 package net.calebscode.aoc.solutions;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 import net.calebscode.aoc.QuestionInput;
 import net.calebscode.aoc.Solution;
@@ -29,7 +20,7 @@ public class AOC2023_Day17 extends Solution<Integer> {
 
 	public AOC2023_Day17() {
 		input = new QuestionInput("/inputs/day17.txt");
-		heatLosses = asInts(input.asCharArray());
+		heatLosses = input.asIntArray();
 		mapWidth = heatLosses[0].length;
 		mapHeight = heatLosses.length;
 		endpoint = new Point(mapWidth - 1, mapHeight -  1);
