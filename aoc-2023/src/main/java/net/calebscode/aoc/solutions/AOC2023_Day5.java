@@ -219,7 +219,7 @@ public class AOC2023_Day5 extends Solution<Long> {
 		return from;
 	}
 
-	static class Range {
+	private static class Range {
 
 		long start;
 		long end; // non-inclusive

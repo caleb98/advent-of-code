@@ -29,6 +29,27 @@ public class QuestionInput {
 		return Collections.unmodifiableList(lines);
 	}
 
+	public List<List<String>> getLinesSplitByBlank() {
+		List<List<String>> sections = new ArrayList<>();
+		List<String> current = new ArrayList<>();
+		for (var line : lines) {
+			if (line.isBlank()) {
+				if (!current.isEmpty()) {
+					sections.add(current);
+					current = new ArrayList<>();
+				}
+			} else {
+				current.add(line);
+			}
+		}
+
+		if (!current.isEmpty()) {
+			sections.add(current);
+		}
+
+		return sections;
+	}
+
 	public char[][] asCharArray() {
 		char[][] chars = new char[lines.size()][];
 
