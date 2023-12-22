@@ -31,7 +31,6 @@ public class AOC2023_Day20 extends Solution<Long> {
 		long lowPulses = 0;
 		long highPulses = 0;
 		for (int i = 0; i < 1000; i++) {
-			// System.out.println("=====================================");
 			var result = doRun(modules);
 			lowPulses += result.a;
 			highPulses += result.b;
@@ -48,18 +47,42 @@ public class AOC2023_Day20 extends Solution<Long> {
 				.map(this::parseModule)
 				.collect(Collectors.toMap(module -> module.name, module -> module));
 
-		var starter = new MachineStart();
-		modules.put(starter.name, starter);
-
 		linkConjunctions(modules);
 
-		long presses = 0;
-		while (!starter.started) {
-			doRun(modules);
-			presses++;
+		var conjunctions = modules.values().stream()
+			.filter(module -> module instanceof Conjunction)
+			.collect(Collectors.toMap(module -> module, module -> 0L));
+
+		for (int i = 1; i <= 100000; i++) {
+			// Do the run
+			var processes = new LinkedList<Triple<String, String, Boolean>>();
+			processes.push(Triple.of("button", "broadcaster", false));
+			while (!processes.isEmpty()) {
+				var current = processes.poll();
+
+				var source = current.a;
+				var module = modules.get(current.b);
+				var pulse = current.c;
+
+				if (module == null) continue;
+
+				var results = module.processInput(source, pulse);
+				processes.addAll(results);
+
+				if (conjunctions.containsKey(module) && results.get(0).c && conjunctions.get(module) == 0) {
+					conjunctions.put(module, (long) i);
+				}
+			}
 		}
 
-		return presses;
+		for (var entry : conjunctions.entrySet()) {
+			System.out.printf("%s: %d\n", entry.getKey().name, entry.getValue());
+		}
+
+		// TODO: really, I should implement something here that will find the least
+		// common multiple of the rx input conjunctions. But for now, the LCM calculator
+		// I found on google will work :)
+		return -1L;
 	}
 
 	private void linkConjunctions(Map<String, Module> modules) {
@@ -78,6 +101,13 @@ public class AOC2023_Day20 extends Solution<Long> {
 		});
 	}
 
+	private List<String> getRxInputs(Map<String, Module> modules) {
+		return modules.values().parallelStream()
+			.filter(module -> Arrays.stream(module.destinations).anyMatch(dest -> dest.equals("rx")))
+			.map(module -> module.name)
+			.toList();
+	}
+
 	private Pair<Long, Long> doRun(Map<String, Module> modules) {
 		var processes = new LinkedList<Triple<String, String, Boolean>>();
 		processes.push(Triple.of("button", "broadcaster", false));
@@ -93,12 +123,6 @@ public class AOC2023_Day20 extends Solution<Long> {
 			if (pulse) highPulses++; else lowPulses++;
 
 			if (module == null) continue;
-
-			// System.out.printf(
-			// 	"%s -%s-> %s\n",
-			// 	source, pulse ? "high" : "low",
-			// 	module.name
-			// );
 
 			var results = module.processInput(source, pulse);
 			processes.addAll(results);
@@ -144,22 +168,6 @@ public class AOC2023_Day20 extends Solution<Long> {
 
 		// Triple<Source, Target, Pulse>
 		abstract List<Triple<String, String, Boolean>> processInput(String source, boolean pulse);
-
-	}
-
-	private static class MachineStart extends Module {
-
-		boolean started = false;
-
-		MachineStart() {
-			super("rx", new String[]{});
-		}
-
-		@Override
-		List<Triple<String, String, Boolean>> processInput(String source, boolean pulse) {
-			if (!pulse) started = true;
-			return List.of();
-		}
 
 	}
 
