@@ -12,7 +12,7 @@ import java.util.Set;
 
 import net.calebscode.aoc.QuestionInput;
 import net.calebscode.aoc.Solution;
-import net.calebscode.aoc.util.Point;
+import net.calebscode.aoc.util.Point2D;
 
 public class AOC2023_Day14 extends Solution<Long> {
 
@@ -94,8 +94,8 @@ public class AOC2023_Day14 extends Solution<Long> {
 	}
 
 	private Dish tilt(int dx, int dy, Dish initial) {
-		Queue<Point> rocks = new LinkedList<>();
-		Set<Point> impeded = new HashSet<>();
+		Queue<Point2D> rocks = new LinkedList<>();
+		Set<Point2D> impeded = new HashSet<>();
 
 		char[][] copy = new char[initial.layout.size()][];
 
@@ -107,7 +107,7 @@ public class AOC2023_Day14 extends Solution<Long> {
 			for (int j = 0; j < initial.layout.get(i).size(); j++) {
 				row[j] = initial.charAt(j, i);
 				if (row[j] == 'O') {
-					rocks.add(new Point(j, i));
+					rocks.add(new Point2D(j, i));
 				}
 			}
 		}
@@ -115,7 +115,7 @@ public class AOC2023_Day14 extends Solution<Long> {
 		var result = new Dish(copy);
 
 		// Start the algorithm
-		Point current;
+		Point2D current;
 		while ((current = rocks.poll()) != null) {
 			var next = current.translate(dx, dy);
 			char block = result.charAt(next.getX(), next.getY());
@@ -124,7 +124,7 @@ public class AOC2023_Day14 extends Solution<Long> {
 			if (block == '.') {
 				result.setChar(next.getX(), next.getY(), 'O');
 				result.setChar(current.getX(), current.getY(), '.');
-				rocks.add(new Point(next.getX(), next.getY()));
+				rocks.add(new Point2D(next.getX(), next.getY()));
 			}
 			// If blocker is a wall, stop and impede
 			else if (block == '#') {

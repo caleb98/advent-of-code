@@ -8,7 +8,7 @@ import java.util.Map;
 import net.calebscode.aoc.QuestionInput;
 import net.calebscode.aoc.Solution;
 import net.calebscode.aoc.util.Pair;
-import net.calebscode.aoc.util.Point;
+import net.calebscode.aoc.util.Point2D;
 import net.calebscode.aoc.util.PointLong;
 
 public class AOC2023_Day18 extends Solution<Long> {

@@ -6,7 +6,7 @@ import java.util.List;
 import net.calebscode.aoc.QuestionInput;
 import net.calebscode.aoc.Solution;
 import net.calebscode.aoc.pathfinding.DijkstraPathfinder;
-import net.calebscode.aoc.util.Point;
+import net.calebscode.aoc.util.Point2D;
 import net.calebscode.aoc.util.Triple;
 
 public class AOC2023_Day17 extends Solution<Integer> {
@@ -15,25 +15,25 @@ public class AOC2023_Day17 extends Solution<Integer> {
 	private final int[][] heatLosses;
 	private final int mapWidth;
 	private final int mapHeight;
-	private final Point endpoint;
-	private final List<Triple<Point, Direction, Integer>> startNodes;
+	private final Point2D endpoint;
+	private final List<Triple<Point2D, Direction, Integer>> startNodes;
 
 	public AOC2023_Day17() {
 		input = new QuestionInput("/inputs/day17.txt");
 		heatLosses = input.asIntArray();
 		mapWidth = heatLosses[0].length;
 		mapHeight = heatLosses.length;
-		endpoint = new Point(mapWidth - 1, mapHeight -  1);
+		endpoint = new Point2D(mapWidth - 1, mapHeight -  1);
 
 		startNodes = List.of(
-			Triple.of(new Point(0, 0), Direction.RIGHT, 0),
-			Triple.of(new Point(0, 0), Direction.DOWN, 0)
+			Triple.of(new Point2D(0, 0), Direction.RIGHT, 0),
+			Triple.of(new Point2D(0, 0), Direction.DOWN, 0)
 		);
 	}
 
 	@Override
 	public Integer solveFirst() {
-		var pathfinder = new DijkstraPathfinder<Triple<Point, Direction, Integer>>(
+		var pathfinder = new DijkstraPathfinder<Triple<Point2D, Direction, Integer>>(
 			this::getAdjacentRegularCrucible,
 			this::getTransitionCost,
 			this::isTerminalRegularCrucible
@@ -48,7 +48,7 @@ public class AOC2023_Day17 extends Solution<Integer> {
 	public Integer solveSecond() {
 		// Same process as before, but use pathfinder with updated adjacency
 		// function and terminal node filter.
-		var pathfinder = new DijkstraPathfinder<Triple<Point, Direction, Integer>>(
+		var pathfinder = new DijkstraPathfinder<Triple<Point2D, Direction, Integer>>(
 			this::getAdjacentUltraCrucible,
 			this::getTransitionCost,
 			this::isTerminalUltraCrucible
@@ -71,20 +71,20 @@ public class AOC2023_Day17 extends Solution<Integer> {
 		return ints;
 	}
 
-	private int getTransitionCost(Triple<Point, Direction, Integer> from, Triple<Point, Direction, Integer> to) {
+	private int getTransitionCost(Triple<Point2D, Direction, Integer> from, Triple<Point2D, Direction, Integer> to) {
 		return heatLosses[to.a.getY()][to.a.getX()];
 	}
 
-	private List<Triple<Point, Direction, Integer>> getAdjacentRegularCrucible(Triple<Point, Direction, Integer> node) {
+	private List<Triple<Point2D, Direction, Integer>> getAdjacentRegularCrucible(Triple<Point2D, Direction, Integer> node) {
 		var adjacent = new ArrayList<>(switch (node.b) {
 			case UP, DOWN -> {
-				Triple<Point, Direction, Integer> left = Triple.of(node.a.translate(-1, 0), Direction.LEFT, 1);
-				Triple<Point, Direction, Integer> right = Triple.of(node.a.translate(1, 0), Direction.RIGHT, 1);
+				Triple<Point2D, Direction, Integer> left = Triple.of(node.a.translate(-1, 0), Direction.LEFT, 1);
+				Triple<Point2D, Direction, Integer> right = Triple.of(node.a.translate(1, 0), Direction.RIGHT, 1);
 				yield List.of(left, right);
 			}
 			case LEFT, RIGHT -> {
-				Triple<Point, Direction, Integer> up = Triple.of(node.a.translate(0, -1), Direction.UP, 1);
-				Triple<Point, Direction, Integer> down = Triple.of(node.a.translate(0, 1), Direction.DOWN, 1);
+				Triple<Point2D, Direction, Integer> up = Triple.of(node.a.translate(0, -1), Direction.UP, 1);
+				Triple<Point2D, Direction, Integer> down = Triple.of(node.a.translate(0, 1), Direction.DOWN, 1);
 				yield List.of(up, down);
 			}
 		});
@@ -107,12 +107,12 @@ public class AOC2023_Day17 extends Solution<Integer> {
 			.toList();
 	}
 
-	private boolean isTerminalRegularCrucible(Triple<Point, Direction, Integer> node) {
+	private boolean isTerminalRegularCrucible(Triple<Point2D, Direction, Integer> node) {
 		return node.a.equals(endpoint);
 	}
 
-	private List<Triple<Point, Direction, Integer>> getAdjacentUltraCrucible(Triple<Point, Direction, Integer> node) {
-		List<Triple<Point, Direction, Integer>> adjacent;
+	private List<Triple<Point2D, Direction, Integer>> getAdjacentUltraCrucible(Triple<Point2D, Direction, Integer> node) {
+		List<Triple<Point2D, Direction, Integer>> adjacent;
 
 		// Ultra crucible must go at least four spaces. If we're not there,
 		// then the only option is going forward.
@@ -129,13 +129,13 @@ public class AOC2023_Day17 extends Solution<Integer> {
 		else {
 			adjacent = new ArrayList<>(switch (node.b) {
 				case UP, DOWN -> {
-					Triple<Point, Direction, Integer> left = Triple.of(node.a.translate(-1, 0), Direction.LEFT, 1);
-					Triple<Point, Direction, Integer> right = Triple.of(node.a.translate(1, 0), Direction.RIGHT, 1);
+					Triple<Point2D, Direction, Integer> left = Triple.of(node.a.translate(-1, 0), Direction.LEFT, 1);
+					Triple<Point2D, Direction, Integer> right = Triple.of(node.a.translate(1, 0), Direction.RIGHT, 1);
 					yield List.of(left, right);
 				}
 				case LEFT, RIGHT -> {
-					Triple<Point, Direction, Integer> up = Triple.of(node.a.translate(0, -1), Direction.UP, 1);
-					Triple<Point, Direction, Integer> down = Triple.of(node.a.translate(0, 1), Direction.DOWN, 1);
+					Triple<Point2D, Direction, Integer> up = Triple.of(node.a.translate(0, -1), Direction.UP, 1);
+					Triple<Point2D, Direction, Integer> down = Triple.of(node.a.translate(0, 1), Direction.DOWN, 1);
 					yield List.of(up, down);
 				}
 			});
@@ -159,7 +159,7 @@ public class AOC2023_Day17 extends Solution<Integer> {
 			.toList();
 	}
 
-	private boolean isTerminalUltraCrucible(Triple<Point, Direction, Integer> node) {
+	private boolean isTerminalUltraCrucible(Triple<Point2D, Direction, Integer> node) {
 		return node.a.equals(endpoint) && node.c >= 4;
 	}
 

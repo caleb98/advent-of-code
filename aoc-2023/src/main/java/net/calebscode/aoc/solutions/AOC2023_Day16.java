@@ -7,7 +7,7 @@ import java.util.Queue;
 
 import net.calebscode.aoc.QuestionInput;
 import net.calebscode.aoc.Solution;
-import net.calebscode.aoc.util.Point;
+import net.calebscode.aoc.util.Point2D;
 import net.calebscode.aoc.util.Triple;
 
 public class AOC2023_Day16 extends Solution<Long> {
@@ -21,7 +21,7 @@ public class AOC2023_Day16 extends Solution<Long> {
 	@Override
 	public Long solveFirst() {
 		var layout = input.asCharArray();
-		return getTotalEnergized(layout, Triple.of(new Point(-1, 0), 1, 0));
+		return getTotalEnergized(layout, Triple.of(new Point2D(-1, 0), 1, 0));
 	}
 
 	@Override
@@ -32,8 +32,8 @@ public class AOC2023_Day16 extends Solution<Long> {
 		// Check vertical entry from top or bottom
 		for (int col = 0; col < layout.length; col++) {
 			var colBest = Math.max(
-				getTotalEnergized(layout, Triple.of(new Point(col, -1), 0, 1)),
-				getTotalEnergized(layout, Triple.of(new Point(col, layout.length), 0, -1))
+				getTotalEnergized(layout, Triple.of(new Point2D(col, -1), 0, 1)),
+				getTotalEnergized(layout, Triple.of(new Point2D(col, layout.length), 0, -1))
 			);
 
 			if (colBest > bestEnergy) {
@@ -44,8 +44,8 @@ public class AOC2023_Day16 extends Solution<Long> {
 		// Check horizontal entry from left or right
 		for (int row = 0; row < layout[0].length; row++) {
 			var rowBest = Math.max(
-				getTotalEnergized(layout, Triple.of(new Point(-1, row), 1, 0)),
-				getTotalEnergized(layout, Triple.of(new Point(layout[0].length, row), -1, 0))
+				getTotalEnergized(layout, Triple.of(new Point2D(-1, row), 1, 0)),
+				getTotalEnergized(layout, Triple.of(new Point2D(layout[0].length, row), -1, 0))
 			);
 
 			if (rowBest > bestEnergy) {
@@ -56,13 +56,13 @@ public class AOC2023_Day16 extends Solution<Long> {
 		return bestEnergy;
 	}
 
-	private long getTotalEnergized(char[][] layout, Triple<Point, Integer, Integer> initial) {
+	private long getTotalEnergized(char[][] layout, Triple<Point2D, Integer, Integer> initial) {
 		// The Triple here is a point containing the beam's current
 		// position, and then two integers dx and dy that store the
 		// beam's motion.
-		HashSet<Point> energized = new HashSet<>();
-		HashSet<Triple<Point, Integer, Integer>> allBeams = new HashSet<>();
-		Queue<Triple<Point, Integer, Integer>> currentBeams = new LinkedList<>();
+		HashSet<Point2D> energized = new HashSet<>();
+		HashSet<Triple<Point2D, Integer, Integer>> allBeams = new HashSet<>();
+		Queue<Triple<Point2D, Integer, Integer>> currentBeams = new LinkedList<>();
 
 		// First beam
 		currentBeams.add(initial);
@@ -78,7 +78,7 @@ public class AOC2023_Day16 extends Solution<Long> {
 
 			var space = layout[nextPos.getY()][nextPos.getX()];
 
-			List<Triple<Point, Integer, Integer>> nextBeams;
+			List<Triple<Point2D, Integer, Integer>> nextBeams;
 
 			// Mirror forward
 			if (space == '/') {
@@ -150,7 +150,7 @@ public class AOC2023_Day16 extends Solution<Long> {
 		return (long) energized.size();
 	}
 
-	private boolean isInBounds(Point position, char[][] layout) {
+	private boolean isInBounds(Point2D position, char[][] layout) {
 		return position.getY() >= 0
 			&& position.getX() >= 0
 			&& position.getY() < layout.length
