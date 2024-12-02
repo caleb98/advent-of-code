@@ -4,4 +4,4 @@ plugins {
 }
 
 rootProject.name = 'advent-of-code'
-include('aoc-lib', 'aoc-2023')
+include('aoc-lib', 'aoc-2023', 'aoc-2024')
