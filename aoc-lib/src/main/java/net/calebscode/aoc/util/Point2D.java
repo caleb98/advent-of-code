@@ -35,9 +35,17 @@ public class Point2D {
 	public int manhattanDistance(Point2D other) {
 		return Math.abs(x - other.x) + Math.abs(y - other.y);
 	}
+	
+	public Point2D translate(Point2D amount) {
+		return translate(amount.x, amount.y);
+	}
 
 	public Point2D translate(int x, int y) {
 		return new Point2D(this.x + x, this.y + y);
+	}
+	
+	public Point2D negate() {
+		return new Point2D(-this.x, -this.y);
 	}
 
 	@Override

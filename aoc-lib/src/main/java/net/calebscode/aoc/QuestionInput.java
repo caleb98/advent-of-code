@@ -6,6 +6,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiFunction;
+
+import net.calebscode.aoc.util.Grid;
+import net.calebscode.aoc.util.Utils;
 
 public class QuestionInput {
 
@@ -23,6 +27,10 @@ public class QuestionInput {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	public String getAllInput() {
+		return lines.stream().reduce("", (acc, val) -> acc + val);
 	}
 
 	public List<String> getLines() {
@@ -49,12 +57,41 @@ public class QuestionInput {
 
 		return sections;
 	}
+	
+	public Grid<Character> asGrid(boolean wrap) {
+		var charArr = asCharacterArray();
+		Utils.transposeInPlace(charArr);
+		return new Grid<Character>(charArr, wrap);
+	}
+	
+	public Grid<Character> asGrid(boolean wrap, BiFunction<Integer, Integer, Character> outOfBoundsSupplier) {
+		var charArr = asCharacterArray();
+		Utils.transposeInPlace(charArr);
+		return new Grid<Character>(charArr, wrap, outOfBoundsSupplier);
+	}
 
+	/**
+	 * When accessing using x,y position, remember
+	 * that y comes first:
+	 * arr[row][col] = arr[y][x]
+	 * @return
+	 */
 	public char[][] asCharArray() {
 		char[][] chars = new char[lines.size()][];
 
 		for (int i = 0; i < lines.size(); i++) {
 			chars[i] = lines.get(i).toCharArray();
+		}
+
+		return chars;
+	}
+	
+	public Character[][] asCharacterArray() {
+		Character[][] chars = new Character[lines.size()][];
+		
+		for (int i = 0; i < lines.size(); i++) {
+			var line = lines.get(i);
+			chars[i] = line.chars().mapToObj(c -> (char) c).toList().toArray(new Character[line.length()]);
 		}
 
 		return chars;

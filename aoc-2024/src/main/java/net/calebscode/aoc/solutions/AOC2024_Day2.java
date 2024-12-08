@@ -3,7 +3,6 @@ package net.calebscode.aoc.solutions;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import net.calebscode.aoc.QuestionInput;
@@ -114,17 +113,17 @@ public class AOC2024_Day2 extends Solution<Long> {
 			if (isSafeWithDampener(report)) totalSafe++;
 		}
 		
-		var groups = reports.stream().collect(Collectors.groupingBy(this::isSafeWithDampener));
-
-		System.out.println("Safe:");
-		for (var safe : groups.get(true)) {
-			System.out.println("\t" + safe);
-		}
-		
-		System.out.println("\nUnsafe:");
-		for (var safe : groups.get(false)) {
-			System.out.println("\t" + safe);
-		}
+//		var groups = reports.stream().collect(Collectors.groupingBy(this::isSafeWithDampener));
+//
+//		System.out.println("Safe:");
+//		for (var safe : groups.get(true)) {
+//			System.out.println("\t" + safe);
+//		}
+//		
+//		System.out.println("\nUnsafe:");
+//		for (var safe : groups.get(false)) {
+//			System.out.println("\t" + safe);
+//		}
 		
 		return totalSafe;
 	}
