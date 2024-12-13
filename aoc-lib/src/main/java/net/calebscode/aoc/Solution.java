@@ -1,15 +1,26 @@
 package net.calebscode.aoc;
 
-public abstract class Solution<T> {
+public interface Solution<T> {
 
-	public void printQuestionInfo() {
-		System.out.println("Question information not provided.");
+	public T solveFirst();
+	public T solveSecond();
+
+	public default void run() {
+		System.out.println("=== Running First ===");
+		var firstAnswer = timeFirst();
+		System.out.println("=====================\n");
+
+		System.out.println("=== Running Second ===");
+		var secondAnswer = timeSecond();
+		System.out.println("======================\n");
+		
+		System.out.println("=== Results ===");
+		System.out.printf("First Solution:  %s\n", firstAnswer);
+		System.out.printf("Second Solution: %s\n", secondAnswer);
+		System.out.println("===============");
 	}
-
-	public abstract T solveFirst();
-	public abstract T solveSecond();
-
-	public final T timeFirst() {
+	
+	public default T timeFirst() {
 		long start = System.currentTimeMillis();
 		T result = solveFirst();
 		long end = System.currentTimeMillis();
@@ -17,7 +28,7 @@ public abstract class Solution<T> {
 		return result;
 	}
 
-	public final T timeSecond() {
+	public default T timeSecond() {
 		long start = System.currentTimeMillis();
 		T result = solveSecond();
 		long end = System.currentTimeMillis();

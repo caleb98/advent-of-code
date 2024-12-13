@@ -7,9 +7,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
-import net.calebscode.aoc.util.Grid;
-import net.calebscode.aoc.util.Utils;
+import net.calebscode.aoc.data.Grid;
+import net.calebscode.aoc.util.ArrayUtils;
 
 public class QuestionInput {
 
@@ -58,34 +59,6 @@ public class QuestionInput {
 		return sections;
 	}
 	
-	public Grid<Character> asGrid(boolean wrap) {
-		var charArr = asCharacterArray();
-		Utils.transposeInPlace(charArr);
-		return new Grid<Character>(charArr, wrap);
-	}
-	
-	public Grid<Character> asGrid(boolean wrap, BiFunction<Integer, Integer, Character> outOfBoundsSupplier) {
-		var charArr = asCharacterArray();
-		Utils.transposeInPlace(charArr);
-		return new Grid<Character>(charArr, wrap, outOfBoundsSupplier);
-	}
-
-	/**
-	 * When accessing using x,y position, remember
-	 * that y comes first:
-	 * arr[row][col] = arr[y][x]
-	 * @return
-	 */
-	public char[][] asCharArray() {
-		char[][] chars = new char[lines.size()][];
-
-		for (int i = 0; i < lines.size(); i++) {
-			chars[i] = lines.get(i).toCharArray();
-		}
-
-		return chars;
-	}
-	
 	public Character[][] asCharacterArray() {
 		Character[][] chars = new Character[lines.size()][];
 		
@@ -93,8 +66,39 @@ public class QuestionInput {
 			var line = lines.get(i);
 			chars[i] = line.chars().mapToObj(c -> (char) c).toList().toArray(new Character[line.length()]);
 		}
+		
+		ArrayUtils.transpose(chars);
 
 		return chars;
+	}
+	
+	public char[][] asCharArray() {
+		char[][] chars = new char[lines.size()][];
+
+		for (int i = 0; i < lines.size(); i++) {
+			chars[i] = lines.get(i).toCharArray();
+		}
+		
+		ArrayUtils.transpose(chars);
+
+		return chars;
+	}
+	
+	public Integer[][] asIntegerArray() {
+		Integer[][] ints = new Integer[lines.size()][];
+
+		for (int row = 0; row < lines.size(); row++) {
+			var line = lines.get(row);
+			ints[row] = new Integer[line.length()];
+
+			for (int col = 0; col < line.length(); col++) {
+				ints[row][col] = line.charAt(col) - '0';
+			}
+		}
+		
+		ArrayUtils.transpose(ints);
+
+		return ints;
 	}
 
 	public int[][] asIntArray() {
@@ -108,8 +112,82 @@ public class QuestionInput {
 				ints[row][col] = line.charAt(col) - '0';
 			}
 		}
+		
+		ArrayUtils.transpose(ints);
 
 		return ints;
 	}
+	
+	private <T> T[][] convertCharacterArray(Function<Character, T> converter) {
+		var charArray = asCharacterArray();
+		var rows = new ArrayList<List<T>>();
+		
+		for (int row = 0; row < charArray.length; row++) {
+			var cols = new ArrayList<T>();
+			for (int col = 0; col < charArray[row].length; col++) {
+				cols.add(converter.apply(charArray[row][col]));
+			}
+			rows.add(cols);
+		}
+		
+		@SuppressWarnings("unchecked")
+		var tArray = (T[][]) rows.parallelStream().map(list -> (T[]) list.toArray()).toArray();
+		return tArray;
+	}
+	
+	public <T> Grid<T> asGridFromCharacters(Function<Character, T> converter, boolean wrap) {
+		var tArray = convertCharacterArray(converter);		
+		return new Grid<T>(tArray, wrap);
+	}
 
+	
+	public <T> Grid<T> asGridFromCharacters(Function<Character, T> converter, boolean wrap, BiFunction<Integer, Integer, T> outOfBoundsSupplier) {
+		var tArray = convertCharacterArray(converter);
+		return new Grid<T>(tArray, wrap, outOfBoundsSupplier);
+	}
+	
+	private <T> T[][] convertIntegerArray(Function<Integer, T> converter) {
+		var charArray = asIntegerArray();
+		var rows = new ArrayList<List<T>>();
+		
+		for (int row = 0; row < charArray.length; row++) {
+			var cols = new ArrayList<T>();
+			for (int col = 0; col < charArray[row].length; col++) {
+				cols.add(converter.apply(charArray[row][col]));
+			}
+			rows.add(cols);
+		}
+		
+		@SuppressWarnings("unchecked")
+		var tArray = (T[][]) rows.parallelStream().map(list -> (T[]) list.toArray()).toArray();
+		return tArray;
+	}
+	
+	public <T> Grid<T> asGridFromIntegers(Function<Integer, T> converter, boolean wrap) {
+		var tArray = convertIntegerArray(converter);		
+		return new Grid<T>(tArray, wrap);
+	}
+
+	
+	public <T> Grid<T> asGridFromIntegers(Function<Integer, T> converter, boolean wrap, BiFunction<Integer, Integer, T> outOfBoundsSupplier) {
+		var tArray = convertIntegerArray(converter);
+		return new Grid<T>(tArray, wrap, outOfBoundsSupplier);
+	}
+	
+	public Grid<Character> asCharacterGrid(boolean wrap) {
+		return new Grid<Character>(asCharacterArray(), wrap);
+	}
+	
+	public Grid<Character> asCharacterGrid(boolean wrap, BiFunction<Integer, Integer, Character> outOfBoundsSupplier) {
+		return new Grid<Character>(asCharacterArray(), wrap, outOfBoundsSupplier);
+	}
+
+	public Grid<Integer> asIntegerGrid(boolean wrap) {
+		return new Grid<Integer>(asIntegerArray(), wrap);
+	}
+	
+	public Grid<Integer> asIntegerGrid(boolean wrap, BiFunction<Integer, Integer, Integer> outOfBoundsSupplier) {
+		return new Grid<Integer>(asIntegerArray(), wrap, outOfBoundsSupplier);
+	}
+	
 }
