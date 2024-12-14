@@ -8,19 +8,16 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
-import net.calebscode.aoc.util.Pair;
-import net.calebscode.aoc.util.Range;
+import net.calebscode.aoc.BasicSolution;
+import net.calebscode.aoc.data.Pair;
+import net.calebscode.aoc.numeric.Range;
 
-public class AOC2023_Day19 extends Solution<Long> {
+public class AOC2023_Day19 extends BasicSolution<Long> {
 
 	private static final Pattern WORKFLOW_PATTERN = Pattern.compile("(\\w+)\\{(.*)\\}");
 
-	private QuestionInput input;
-
 	public AOC2023_Day19() {
-		input = new QuestionInput("/inputs/day19.txt");
+		super(19);
 	}
 
 	@Override
@@ -63,14 +60,14 @@ public class AOC2023_Day19 extends Solution<Long> {
 		var current = workflows.get(workflowName);
 		var splits = current.apply(parts);
 		return splits.stream().flatMap(pair -> {
-			if (pair.b.equals("R")) {
+			if (pair.second.equals("R")) {
 				return Stream.of();
 			}
-			else if (pair.b.equals("A")) {
-				return Stream.of(pair.a);
+			else if (pair.second.equals("A")) {
+				return Stream.of(pair.first);
 			}
 
-			return calculateRanges(workflows, pair.b, pair.a).stream();
+			return calculateRanges(workflows, pair.second, pair.first).stream();
 		}).toList();
 	}
 
@@ -144,10 +141,10 @@ public class AOC2023_Day19 extends Solution<Long> {
 					var split = step.split(current);
 
 					// Add passing split
-					if (split.a != null) splits.add(Pair.of(split.a, step.result));
+					if (split.first != null) splits.add(Pair.of(split.first, step.result));
 
 					// Propogate failing split
-					current = split.b;
+					current = split.second;
 
 					// Don't bother with the rest if nothing to propogate
 					if (current == null) break;

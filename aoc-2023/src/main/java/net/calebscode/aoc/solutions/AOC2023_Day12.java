@@ -7,15 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
+import net.calebscode.aoc.BasicSolution;
 
-public class AOC2023_Day12 extends Solution<Long> {
-
-	private QuestionInput input;
+public class AOC2023_Day12 extends BasicSolution<Long> {
 
 	public AOC2023_Day12() {
-		input = new QuestionInput("/inputs/day12.txt");
+		super(12);
 	}
 
 	@Override

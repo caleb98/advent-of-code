@@ -6,16 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
-import net.calebscode.aoc.util.Pair;
+import net.calebscode.aoc.BasicSolution;
+import net.calebscode.aoc.data.Pair;
 
-public class AOC2023_Day15 extends Solution<Long> {
-
-	private QuestionInput input;
+public class AOC2023_Day15 extends BasicSolution<Long> {
 
 	public AOC2023_Day15() {
-		input = new QuestionInput("/inputs/day15.txt");
+		super(15);
 	}
 
 	@Override
@@ -46,7 +43,7 @@ public class AOC2023_Day15 extends Solution<Long> {
 				// Search for matching lens label
 				int replace = -1;
 				for (int i = 0; i < box.size(); i++) {
-					if (box.get(i).a.equals(label)) {
+					if (box.get(i).first.equals(label)) {
 						replace = i;
 						break;
 					}
@@ -65,7 +62,7 @@ public class AOC2023_Day15 extends Solution<Long> {
 				// Search for matching lens label
 				int remove = -1;
 				for (int i = 0; i < box.size(); i++) {
-					if (box.get(i).a.equals(label)) {
+					if (box.get(i).first.equals(label)) {
 						remove = i;
 						break;
 					}
@@ -98,7 +95,7 @@ public class AOC2023_Day15 extends Solution<Long> {
 
 			for (int lensNum = 0; lensNum < boxLenses.size(); lensNum++) {
 				var lens = boxLenses.get(lensNum);
-				totalPower += (boxNum + 1) * (lensNum + 1) * lens.b;
+				totalPower += (boxNum + 1) * (lensNum + 1) * lens.second;
 			}
 		}
 

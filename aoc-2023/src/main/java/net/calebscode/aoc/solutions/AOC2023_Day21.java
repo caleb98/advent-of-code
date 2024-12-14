@@ -5,16 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
-import net.calebscode.aoc.util.Point2D;
+import net.calebscode.aoc.BasicSolution;
+import net.calebscode.aoc.geometry.Point2D;
 
-public class AOC2023_Day21 extends Solution<Long> {
-
-	private QuestionInput input;
+public class AOC2023_Day21 extends BasicSolution<Long> {
 
 	public AOC2023_Day21() {
-		input = new QuestionInput("/inputs/day21.txt");
+		super(21);
 	}
 
 	@Override
@@ -122,6 +119,9 @@ public class AOC2023_Day21 extends Solution<Long> {
 			System.out.printf("%3d %10d %10d %10d %10d %10d %10d %10d\n", i, actual.get(i), expected.get(i), delta1, delta2, delta3, delta4, delta5);
 		}
 
+		// There was some crazy thing with a polynomial here. This code
+		// doesn't fully solve the problem but I can't remember what
+		// all the next steps were...
 		return (long) currentPoints.size();
 	}
 

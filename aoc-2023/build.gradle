@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation project(':aoc-lib-legacy')
+    implementation project(':aoc-lib')
 }
 
 application {

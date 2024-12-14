@@ -3,66 +3,35 @@ package net.calebscode.aoc.solutions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
+import net.calebscode.aoc.BasicSolution;
 
-public class AOC2023_Day22 extends Solution<Long> {
+public class AOC2023_Day22 extends BasicSolution<Long> {
 
-	private QuestionInput input;
-
+	private List<Brick> bricks;
+	private Map<Point, Brick> brickMap;
+	private Map<Brick, Set<Brick>> supportsGraph;		// maps a brick to the set of bricks it supports
+	private Map<Brick, Set<Brick>> supportedByGraph;	// maps a brick to the set of bricks it is supported by
+	private Set<Brick> canRemove;
+	
 	public AOC2023_Day22() {
-		input = new QuestionInput("/inputs/day22.txt");
+		super(22);
 	}
 	
 	@Override
 	public Long solveFirst() {
-		var bricks = input.getLines().parallelStream()
-			.map(this::parseBrick)
-			.toList();
+		bricks = input.getLines().parallelStream()
+				.map(this::parseBrick)
+				.toList();
 		
 		iterate(bricks);
-		
-//		var x = bricks.parallelStream()
-//			.map(brick -> iterate(copyBricksWithout(bricks, brick)))
-//			.toList();
-////			.filter(count -> count == 0)
-////			.count();
-//		
-//		return 0L;
-		
-		// First attempt
-//		boolean brickMoved = true;
-//		while (brickMoved) {
-//			brickMoved = false;
-//			
-//			for (var brick : bricks) {
-//				if (brick.isOnFloor()) continue;
-//				var canMoveDown = true;
-//				
-//				for (var belowPoint : brick.getBelow()) {					
-//					for (var otherBrick : bricks) {
-//						if (otherBrick == brick) continue;
-//						if (otherBrick.points.contains(belowPoint)) {
-//							canMoveDown = false;
-//							break;
-//						}
-//					}
-//					
-//					if (!canMoveDown) break;
-//				}
-//				
-//				if (canMoveDown) {
-//					brick.moveDown();
-//					brickMoved = true;
-//				}
-//			}
-//		}
-//		
-		var brickMap = new HashMap<Point, Brick>();
+
+		brickMap = new HashMap<Point, Brick>();
 		
 		for (var brick : bricks) {
 			for (var point : brick.points) {
@@ -70,8 +39,8 @@ public class AOC2023_Day22 extends Solution<Long> {
 			}
 		}
 		
-		var supportsGraph = new HashMap<Brick, Set<Brick>>();
-		var supportedByGraph = new HashMap<Brick, Set<Brick>>();
+		supportsGraph = new HashMap<Brick, Set<Brick>>();
+		supportedByGraph = new HashMap<Brick, Set<Brick>>();
 		
 		for (var brick : bricks) {
 			for (var belowPoint : brick.getBelow()) {
@@ -88,6 +57,7 @@ public class AOC2023_Day22 extends Solution<Long> {
 			}
 		}
 		
+		canRemove = new HashSet<>();
 		Long canRemoveCount = 0L;
 		for (var brick : bricks) {
 			// Brick supports no other bricks
@@ -109,6 +79,7 @@ public class AOC2023_Day22 extends Solution<Long> {
 			
 			if (supportsHaveAlternatives) {
 				canRemoveCount++;
+				canRemove.add(brick);
 			}
 		}
 		
@@ -117,7 +88,51 @@ public class AOC2023_Day22 extends Solution<Long> {
 
 	@Override
 	public Long solveSecond() {
-		return -1L;
+		return bricks.stream()
+			.filter(brick -> !canRemove.contains(brick)) // Only process bricks we can't remove without causing a fall
+			.mapToLong(this::countChainFalling)
+			.sum();
+	}
+	
+	private long countChainFalling(Brick remove) {
+		var bricksLessRemoved = new HashSet<>(bricks);
+		bricksLessRemoved.remove(remove);
+		
+		var falling = new HashSet<Brick>();
+		var safe = new HashSet<Brick>();
+		var check = new LinkedList<>(bricksLessRemoved);
+		
+		falling.add(remove);
+		check.addAll(supportsGraph.getOrDefault(remove, Set.of()));
+		
+		while (check.size() > 0) {
+			var current = check.pop();
+			var supportedBy = supportedByGraph.get(current);
+			
+			// Any brick on the floor is safe.
+			// Any brick supported by at least one safe brick is safe.
+			if (current.isOnFloor() || supportedBy.stream().anyMatch(safe::contains)) {
+				safe.add(current);
+			}
+			// Any brick supported only by falling bricks is falling.
+			else if (supportedBy.stream().allMatch(falling::contains)) {
+				falling.add(current);
+			}
+			// At this point we know:
+			//   - This brick is not on the floor
+			//   - Not all supporting bricks are falling -> there is at least one brick that is safe or still needs checking
+			//   - Not a single supporting brick is safe -> eliminates the possibility that a single brick is safe, so we know at least one still needs checking
+			// So, lets shift this guy to the back until we have more info.
+			else {
+				check.add(current);
+				continue;
+			}
+		}
+		
+		// Subtract 1 to account for the fact that the initially
+		// removed brick isn't technically "falling" based on the
+		// question description.
+		return falling.size() - 1;
 	}
 	
 	List<Brick> copyBricksWithout(List<Brick> bricks, Brick remove) {

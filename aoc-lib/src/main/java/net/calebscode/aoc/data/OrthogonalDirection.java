@@ -3,11 +3,11 @@ package net.calebscode.aoc.data;
 public enum OrthogonalDirection {
 	UP, DOWN, LEFT, RIGHT;
 	
-	OrthogonalDirection clockwise() {
+	public OrthogonalDirection clockwise() {
 		return OrthogonalDirection.clockwise(this);
 	}
 	
-	OrthogonalDirection counterClockwise() {
+	public OrthogonalDirection counterClockwise() {
 		return OrthogonalDirection.counterClockwise(this);
 	}
 	

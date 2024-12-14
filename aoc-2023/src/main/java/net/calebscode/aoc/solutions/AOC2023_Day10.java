@@ -6,15 +6,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
+import net.calebscode.aoc.BasicSolution;
 
-public class AOC2023_Day10 extends Solution<Integer> {
-
-	private QuestionInput input;
+public class AOC2023_Day10 extends BasicSolution<Integer> {
 
 	public AOC2023_Day10() {
-		input = new QuestionInput("/inputs/day10.txt");
+		super(10);
 	}
 
 	@Override

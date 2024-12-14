@@ -5,15 +5,12 @@ import java.util.List;
 import java.util.Stack;
 import java.util.stream.Stream;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
+import net.calebscode.aoc.BasicSolution;
 
-public class AOC2023_Day9 extends Solution<Long> {
+public class AOC2023_Day09 extends BasicSolution<Long> {
 
-	private QuestionInput input;
-
-	public AOC2023_Day9() {
-		input = new QuestionInput("/inputs/day9.txt");
+	public AOC2023_Day09() {
+		super(9);
 	}
 
 	@Override

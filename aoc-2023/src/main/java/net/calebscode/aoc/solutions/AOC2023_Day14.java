@@ -10,23 +10,25 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
-import net.calebscode.aoc.util.Point2D;
+import net.calebscode.aoc.BasicSolution;
+import net.calebscode.aoc.geometry.Point2D;
+import net.calebscode.aoc.util.ArrayUtils;
 
-public class AOC2023_Day14 extends Solution<Long> {
-
-	private QuestionInput input;
+public class AOC2023_Day14 extends BasicSolution<Long> {
 
 	public AOC2023_Day14() {
-		input = new QuestionInput("/inputs/day14.txt");
+		super(14);
 	}
 
 	@Override
 	public Long solveFirst() {
 		long start = System.currentTimeMillis();
 
-		var dish = new Dish(input.asCharArray());
+		// Added transposing here to account for breaking change in QuestionInput api
+		var chars = input.asCharArray();
+		ArrayUtils.transpose(chars);
+		var dish = new Dish(chars);
+		
 		var tilted = tilt(0, -1, dish);
 		var load = tilted.calculateLoad();
 
@@ -40,7 +42,10 @@ public class AOC2023_Day14 extends Solution<Long> {
 	public Long solveSecond() {
 		long start = System.currentTimeMillis();
 
-		var dish = new Dish(input.asCharArray());
+		// Added transposing here to account for breaking change in QuestionInput api
+		var chars = input.asCharArray();
+		ArrayUtils.transpose(chars);
+		var dish = new Dish(chars);
 
 		var cycleMap = new HashMap<Dish, Dish>();
 		var dishIter = new HashMap<Dish, Integer>();

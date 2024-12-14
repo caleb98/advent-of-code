@@ -1,18 +1,15 @@
 package net.calebscode.aoc.solutions;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
+import net.calebscode.aoc.BasicSolution;
 
-public class AOC2023_Day2 extends Solution<Integer> {
-
-	private final QuestionInput input;
+public class AOC2023_Day02 extends BasicSolution<Integer> {
 
 	private static final int MAX_RED_CUBES = 12;
 	private static final int MAX_GREEN_CUBES = 13;
 	private static final int MAX_BLUE_CUBES = 14;
 
-	public AOC2023_Day2() {
-		input = new QuestionInput("/inputs/day2.txt");
+	public AOC2023_Day02() {
+		super(2);
 	}
 
 	@Override

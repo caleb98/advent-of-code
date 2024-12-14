@@ -7,17 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
-import net.calebscode.aoc.util.Pair;
-import net.calebscode.aoc.util.Triple;
+import net.calebscode.aoc.BasicSolution;
+import net.calebscode.aoc.data.Pair;
+import net.calebscode.aoc.data.Triple;
 
-public class AOC2023_Day20 extends Solution<Long> {
-
-	private QuestionInput input;
+public class AOC2023_Day20 extends BasicSolution<Long> {
 
 	public AOC2023_Day20() {
-		input = new QuestionInput("/inputs/day20.txt");
+		super(20);
 	}
 
 	@Override
@@ -32,8 +29,8 @@ public class AOC2023_Day20 extends Solution<Long> {
 		long highPulses = 0;
 		for (int i = 0; i < 1000; i++) {
 			var result = doRun(modules);
-			lowPulses += result.a;
-			highPulses += result.b;
+			lowPulses += result.first;
+			highPulses += result.second;
 		}
 
 		System.out.printf("L: %d\nH: %d\n", lowPulses, highPulses);
@@ -60,16 +57,16 @@ public class AOC2023_Day20 extends Solution<Long> {
 			while (!processes.isEmpty()) {
 				var current = processes.poll();
 
-				var source = current.a;
-				var module = modules.get(current.b);
-				var pulse = current.c;
+				var source = current.first;
+				var module = modules.get(current.second);
+				var pulse = current.third;
 
 				if (module == null) continue;
 
 				var results = module.processInput(source, pulse);
 				processes.addAll(results);
 
-				if (conjunctions.containsKey(module) && results.get(0).c && conjunctions.get(module) == 0) {
+				if (conjunctions.containsKey(module) && results.get(0).third && conjunctions.get(module) == 0) {
 					conjunctions.put(module, (long) i);
 				}
 			}
@@ -82,6 +79,7 @@ public class AOC2023_Day20 extends Solution<Long> {
 		// TODO: really, I should implement something here that will find the least
 		// common multiple of the rx input conjunctions. But for now, the LCM calculator
 		// I found on google will work :)
+		// https://www.calculatorsoup.com/calculators/math/lcm.php?input=3863+3943+3989+4003&data=none&action=solve
 		return -1L;
 	}
 
@@ -116,9 +114,9 @@ public class AOC2023_Day20 extends Solution<Long> {
 		while (!processes.isEmpty()) {
 			var current = processes.poll();
 
-			var source = current.a;
-			var module = modules.get(current.b);
-			var pulse = current.c;
+			var source = current.first;
+			var module = modules.get(current.second);
+			var pulse = current.third;
 
 			if (pulse) highPulses++; else lowPulses++;
 

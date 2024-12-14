@@ -10,11 +10,11 @@ public enum Direction {
 	WEST,
 	NORTHWEST;
 	
-	Direction clockwise() {
+	public Direction clockwise() {
 		return Direction.clockwise(this);
 	}
 	
-	Direction counterClockwise() {
+	public Direction counterClockwise() {
 		return Direction.counterClockwise(this);
 	}
 	

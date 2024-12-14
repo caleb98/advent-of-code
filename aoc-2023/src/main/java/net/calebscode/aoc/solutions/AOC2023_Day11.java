@@ -4,16 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
-import net.calebscode.aoc.util.PointLong;
+import net.calebscode.aoc.BasicSolution;
+import net.calebscode.aoc.geometry.PointLong;
 
-public class AOC2023_Day11 extends Solution<Long> {
-
-	private QuestionInput input;
+public class AOC2023_Day11 extends BasicSolution<Long> {
 
 	public AOC2023_Day11() {
-		input = new QuestionInput("/inputs/day11.txt");
+		super(11);
 	}
 
 	@Override

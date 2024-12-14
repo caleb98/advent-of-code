@@ -6,12 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
+import net.calebscode.aoc.BasicSolution;
 
-public class AOC2023_Day5 extends Solution<Long> {
-
-	private QuestionInput input;
+public class AOC2023_Day05 extends BasicSolution<Long> {
 
 	private List<Long> seeds = new ArrayList<>();
 	private List<Range> seedRanges = new ArrayList<>();
@@ -23,8 +20,8 @@ public class AOC2023_Day5 extends Solution<Long> {
 	private Map<Range, Range> tempToHumid;
 	private Map<Range, Range> humidToLoc;
 
-	public AOC2023_Day5() {
-		input = new QuestionInput("/inputs/day5.txt");
+	public AOC2023_Day05() {
+		super(5);
 		parseInput();
 	}
 

@@ -4,18 +4,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
+import net.calebscode.aoc.BasicSolution;
 
-public class AOC2023_Day6 extends Solution<Long> {
-
-	private QuestionInput input;
+public class AOC2023_Day06 extends BasicSolution<Long> {
 
 	private List<Long> times;
 	private List<Long> distances;
 
-	public AOC2023_Day6() {
-		input = new QuestionInput("/inputs/day6.txt");
+	public AOC2023_Day06() {
+		super(6);
 	}
 
 	@Override

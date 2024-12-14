@@ -1,14 +1,11 @@
 package net.calebscode.aoc.solutions;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
+import net.calebscode.aoc.BasicSolution;
 
-public class AOC2023_Day1 extends Solution<Integer> {
+public class AOC2023_Day01 extends BasicSolution<Integer> {
 
-	private final QuestionInput input;
-
-	public AOC2023_Day1() {
-		input = new QuestionInput("/inputs/day1.txt");
+	public AOC2023_Day01() {
+		super(1);
 	}
 
 	@Override
@@ -26,23 +23,23 @@ public class AOC2023_Day1 extends Solution<Integer> {
 
 	@Override
 	public Integer solveSecond() {
-			return input.getLines().parallelStream()
-				.map(line -> {
-					int index = 0;
-					while (index < line.length()) {
-						line = line.substring(0, index) + swapNumberWord(line.substring(index));
-						index++;
-					}
-					return line;
-				})
-				.map(line -> line.replaceAll("[a-z]", ""))
-				.map(digits -> {
-					char first = digits.charAt(0);
-					char last = digits.charAt(digits.length() - 1);
-					return first + "" + last;
-				})
-				.map(Integer::valueOf)
-				.reduce(0, Integer::sum);
+		return input.getLines().parallelStream()
+			.map(line -> {
+				int index = 0;
+				while (index < line.length()) {
+					line = line.substring(0, index) + swapNumberWord(line.substring(index));
+					index++;
+				}
+				return line;
+			})
+			.map(line -> line.replaceAll("[a-z]", ""))
+			.map(digits -> {
+				char first = digits.charAt(0);
+				char last = digits.charAt(digits.length() - 1);
+				return first + "" + last;
+			})
+			.map(Integer::valueOf)
+			.reduce(0, Integer::sum);
 	}
 
 	String swapNumberWord(String text) {

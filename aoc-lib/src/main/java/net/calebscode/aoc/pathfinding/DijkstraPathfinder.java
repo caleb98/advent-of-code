@@ -27,6 +27,73 @@ public class DijkstraPathfinder<T> {
 		this.getTransitionCost = getTransitionCost;
 		this.isTerminalState = isTerminalState;
 	}
+	
+	public DijkstraPath pathfindLongest(Iterable<T> startNodes) {
+		var totalCosts = new HashMap<T, Integer>();
+		var bestPaths = new HashMap<T, T>();
+		var visited = new HashSet<T>();
+		var unvisited = new TreeSet<T>(createSorter(totalCosts));
+
+		for (var node : startNodes) {
+			totalCosts.put(node, 0);
+			unvisited.add(node);
+		}
+
+		T current;
+		while (!unvisited.isEmpty()) {
+			current = unvisited.removeFirst();
+
+			var currentTotalCost = totalCosts.get(current);
+			var adjacentNodes = getAdjacent.apply(current).stream()
+									.filter(n -> !visited.contains(n))
+									.toList();
+
+			for (var node : adjacentNodes) {
+				unvisited.remove(node);
+				var transitionCost = getTransitionCost.apply(current, node);
+
+				var totalCostToAdjacent = currentTotalCost + transitionCost;
+				var prevTotalCostToAdjacent = totalCosts.getOrDefault(node, Integer.MAX_VALUE);
+
+				if (totalCostToAdjacent < prevTotalCostToAdjacent) {
+					totalCosts.put(node, totalCostToAdjacent);
+					bestPaths.put(node, current);
+				}
+			}
+
+			unvisited.addAll(adjacentNodes);
+			visited.add(current);
+		}
+
+		// Collect the end nodes
+		var endNodes= visited.parallelStream()
+						.filter(node -> isTerminalState.test(node))
+						.toList();
+
+		// Find the best end node with the lowest cost
+		T bestEndpoint = null;
+		int highestCost = Integer.MIN_VALUE;
+
+		for (var endpoint : endNodes) {
+			int endpointCost = totalCosts.get(endpoint);
+
+			if (highestCost < endpointCost) {
+				bestEndpoint = endpoint;
+				highestCost = endpointCost;
+			}
+		}
+
+		// Construct the shortest path using the best endpoint
+		var path = new LinkedList<T>();
+		current = bestEndpoint;
+		while (totalCosts.get(current) != 0) {
+			path.addFirst(current);
+			current = bestPaths.get(current);
+		}
+		path.addFirst(current); // Add the starting node
+
+		return new DijkstraPath(totalCosts.get(bestEndpoint), path);
+	}
 
 	public DijkstraPath pathfind(Iterable<T> startNodes) {
 		var totalCosts = new HashMap<T, Integer>();

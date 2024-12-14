@@ -5,28 +5,28 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
-import net.calebscode.aoc.util.Point2D;
-import net.calebscode.aoc.util.Triple;
+import net.calebscode.aoc.BasicSolution;
+import net.calebscode.aoc.data.Triple;
+import net.calebscode.aoc.geometry.Point2D;
+import net.calebscode.aoc.util.ArrayUtils;
 
-public class AOC2023_Day16 extends Solution<Long> {
-
-	private QuestionInput input;
+public class AOC2023_Day16 extends BasicSolution<Long> {
 
 	public AOC2023_Day16() {
-		input = new QuestionInput("/inputs/day16.txt");
+		super(16);
 	}
 
 	@Override
 	public Long solveFirst() {
 		var layout = input.asCharArray();
+		ArrayUtils.transpose(layout);
 		return getTotalEnergized(layout, Triple.of(new Point2D(-1, 0), 1, 0));
 	}
 
 	@Override
 	public Long solveSecond() {
 		var layout = input.asCharArray();
+		ArrayUtils.transpose(layout);
 		long bestEnergy = 0;
 
 		// Check vertical entry from top or bottom
@@ -69,7 +69,7 @@ public class AOC2023_Day16 extends Solution<Long> {
 
 		while (!currentBeams.isEmpty()) {
 			var beam = currentBeams.poll();
-			var nextPos = beam.a.translate(beam.b, beam.c);
+			var nextPos = beam.first.translate(beam.second, beam.third);
 
 			// Skip any beams that are going out of bounds.
 			if (!isInBounds(nextPos, layout)) {
@@ -84,13 +84,13 @@ public class AOC2023_Day16 extends Solution<Long> {
 			if (space == '/') {
 				int nextDX;
 				int nextDY;
-				if (beam.b != 0) { // Horizontal motion, flip and make vertical
-					nextDY = -beam.b;
+				if (beam.second != 0) { // Horizontal motion, flip and make vertical
+					nextDY = -beam.second;
 					nextDX = 0;
 				}
 				else { // Vertical motion, flip and make horizontal
 					nextDY = 0;
-					nextDX = -beam.c;
+					nextDX = -beam.third;
 				}
 				var nextBeam = Triple.of(nextPos, nextDX, nextDY);
 				nextBeams = List.of(nextBeam);
@@ -99,32 +99,32 @@ public class AOC2023_Day16 extends Solution<Long> {
 			else if (space == '\\') {
 				int nextDX;
 				int nextDY;
-				if (beam.b != 0) { // Horizontal motion, make vertical
-					nextDY = beam.b;
+				if (beam.second != 0) { // Horizontal motion, make vertical
+					nextDY = beam.second;
 					nextDX = 0;
 				}
 				else { // Vertical motion, make horizontal
 					nextDY = 0;
-					nextDX = beam.c;
+					nextDX = beam.third;
 				}
 				var nextBeam = Triple.of(nextPos, nextDX, nextDY);
 				nextBeams = List.of(nextBeam);
 			}
 			// Vertical splitter
-			else if (space == '|' && beam.b != 0) {
+			else if (space == '|' && beam.second != 0) {
 				var upBeam = Triple.of(nextPos, 0, -1);
 				var downBeam = Triple.of(nextPos, 0, 1);
 				nextBeams = List.of(upBeam, downBeam);
 			}
 			// Horizontal splitter
-			else if (space == '-' && beam.c != 0) {
+			else if (space == '-' && beam.third != 0) {
 				var leftBeam = Triple.of(nextPos, -1, 0);
 				var rightBeam = Triple.of(nextPos, 1, 0);
 				nextBeams = List.of(leftBeam, rightBeam);
 			}
 			// Must be empty or effectively empty
 			else {
-				var nextBeam = Triple.of(nextPos, beam.b, beam.c);
+				var nextBeam = Triple.of(nextPos, beam.second, beam.third);
 				nextBeams = List.of(nextBeam);
 			}
 
@@ -138,7 +138,7 @@ public class AOC2023_Day16 extends Solution<Long> {
 
 			// Keep track of the new beams for overall data
 			allBeams.addAll(nextBeams);
-			energized.addAll(nextBeams.stream().map(nextBeam -> nextBeam.a).toList());
+			energized.addAll(nextBeams.stream().map(nextBeam -> nextBeam.first).toList());
 		}
 
 		// energized.forEach(point -> layout[point.getY()][point.getX()] = '#');

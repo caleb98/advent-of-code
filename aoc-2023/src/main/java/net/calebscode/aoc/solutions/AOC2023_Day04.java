@@ -4,15 +4,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.IntStream;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
+import net.calebscode.aoc.BasicSolution;
 
-public class AOC2023_Day4 extends Solution<Integer> {
+public class AOC2023_Day04 extends BasicSolution<Integer> {
 
-	private QuestionInput input;
 
-	public AOC2023_Day4() {
-		input = new QuestionInput("/inputs/day4.txt");
+	public AOC2023_Day04() {
+		super(4);
 	}
 
 	@Override

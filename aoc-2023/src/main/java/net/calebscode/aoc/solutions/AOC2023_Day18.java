@@ -1,22 +1,16 @@
 package net.calebscode.aoc.solutions;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
-import net.calebscode.aoc.util.Pair;
-import net.calebscode.aoc.util.Point2D;
-import net.calebscode.aoc.util.PointLong;
+import net.calebscode.aoc.BasicSolution;
+import net.calebscode.aoc.data.Pair;
+import net.calebscode.aoc.geometry.PointLong;
 
-public class AOC2023_Day18 extends Solution<Long> {
-
-	private QuestionInput input;
+public class AOC2023_Day18 extends BasicSolution<Long> {
 
 	public AOC2023_Day18() {
-		input = new QuestionInput("/inputs/day18.txt");
+		super(18);
 	}
 
 	@Override
@@ -69,8 +63,8 @@ public class AOC2023_Day18 extends Solution<Long> {
 		char prevDir = ' ';
 		boolean wasInside = false;
 		for (var instruction : instructions) {
-			var dir = instruction.a;
-			var len = instruction.b;
+			var dir = instruction.first;
+			var len = instruction.second;
 
 			PointLong next = switch (dir) {
 				case 'U' -> {

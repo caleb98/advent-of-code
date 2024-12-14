@@ -32,12 +32,21 @@ public class Point2D {
 		this.y = y;
 	}
 	
-	public Point2D moveDirection(OrthogonalDirection direction) {
-		return switch (direction) {
+	public Point2D moveForward(OrthogonalDirection facing) {
+		return switch (facing) {
 			case UP -> up();
 			case DOWN -> down();
 			case LEFT -> left();
 			case RIGHT -> right();
+		};
+	}
+	
+	public Point2D moveBackward(OrthogonalDirection facing) {
+		return switch (facing) {
+			case UP -> down();
+			case DOWN -> up();
+			case LEFT -> right();
+			case RIGHT -> left();
 		};
 	}
 	

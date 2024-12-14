@@ -9,15 +9,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
+import net.calebscode.aoc.BasicSolution;
 
-public class AOC2023_Day8 extends Solution<Long> {
+public class AOC2023_Day08 extends BasicSolution<Long> {
 
-	private QuestionInput input;
-
-	public AOC2023_Day8() {
-		input = new QuestionInput("/inputs/day8.txt");
+	public AOC2023_Day08() {
+		super(8);
 	}
 
 	@Override

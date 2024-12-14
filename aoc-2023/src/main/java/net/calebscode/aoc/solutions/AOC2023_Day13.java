@@ -3,16 +3,13 @@ package net.calebscode.aoc.solutions;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.calebscode.aoc.QuestionInput;
-import net.calebscode.aoc.Solution;
-import net.calebscode.aoc.util.Pair;
+import net.calebscode.aoc.BasicSolution;
+import net.calebscode.aoc.data.Pair;
 
-public class AOC2023_Day13 extends Solution<Long> {
-
-	private QuestionInput input;
+public class AOC2023_Day13 extends BasicSolution<Long> {
 
 	public AOC2023_Day13() {
-		input = new QuestionInput("/inputs/day13.txt");
+		super(13);
 	}
 
 	@Override
@@ -36,9 +33,9 @@ public class AOC2023_Day13 extends Solution<Long> {
 	}
 
 	private long getReflectionValue(Pair<ReflectionType, Integer> reflection) {
-		return switch (reflection.a) {
-			case HORIZONTAL -> 100 * reflection.b;
-			case VERTICAL -> reflection.b;
+		return switch (reflection.first) {
+			case HORIZONTAL -> 100 * reflection.second;
+			case VERTICAL -> reflection.second;
 		};
 	}
 
@@ -114,7 +111,7 @@ public class AOC2023_Day13 extends Solution<Long> {
 			}
 
 			// Now we only count the reflection if there was also a smudge
-			if (reflects && smudge && (bestReflection == null || bestReflection.b < i)) {
+			if (reflects && smudge && (bestReflection == null || bestReflection.second < i)) {
 				bestReflection = Pair.of(ReflectionType.HORIZONTAL, i);
 			}
 		}
@@ -145,7 +142,7 @@ public class AOC2023_Day13 extends Solution<Long> {
 				}
 			}
 
-			if (reflects && smudge && (bestReflection == null || bestReflection.b < i)) {
+			if (reflects && smudge && (bestReflection == null || bestReflection.second < i)) {
 				bestReflection = Pair.of(ReflectionType.VERTICAL, i);
 			}
 		}
