@@ -5,7 +5,6 @@ plugins {
 
 rootProject.name = 'advent-of-code'
 include(
-	'aoc-lib-legacy',
 	'aoc-lib',
 	'aoc-2023',
 	'aoc-2024'

@@ -1,3 +1,0 @@
-plugins {
-	id 'net.calebscode.aoc.java-library-conventions'
-}
