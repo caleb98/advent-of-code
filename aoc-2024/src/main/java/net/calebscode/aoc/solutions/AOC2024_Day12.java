@@ -10,7 +10,7 @@ import net.calebscode.aoc.BasicSolution;
 import net.calebscode.aoc.data.Grid;
 import net.calebscode.aoc.data.Pair;
 import net.calebscode.aoc.geometry.Point2D;
-import net.calebscode.aoc.util.ArrayUtils;
+import net.calebscode.aoc.util.Utils;
 
 public class AOC2024_Day12 extends BasicSolution<Long> {
 
@@ -28,7 +28,7 @@ public class AOC2024_Day12 extends BasicSolution<Long> {
 			}
 		}
 		
-		plots = ArrayUtils.getAdjacentGroups(
+		plots = Utils.getAdjacentGroups(
 			allPoints, 
 			point -> point.orthogonallyAdjacent(), 
 			(a, b) -> garden.get(a).equals(garden.get(b))

@@ -19,7 +19,7 @@ public class AOC2024_Day03 extends BasicSolution<Long> {
 	
 	@Override
 	public Long solveFirst() {
-		var instructions = input.getAllInput();
+		var instructions = input.asOneLine();
 		var matcher = multPattern.matcher(instructions);
 		
 		long sum = 0;
@@ -34,7 +34,7 @@ public class AOC2024_Day03 extends BasicSolution<Long> {
 
 	@Override
 	public Long solveSecond() {
-		var instructions = input.getAllInput();
+		var instructions = input.asOneLine();
 		var multMatcher = multPattern.matcher(instructions);
 		var doMatcher = doPattern.matcher(instructions);
 		var dontMatcher = dontPattern.matcher(instructions);

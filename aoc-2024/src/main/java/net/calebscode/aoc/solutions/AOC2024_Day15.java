@@ -16,7 +16,6 @@ public class AOC2024_Day15 extends BasicSolution<Long> {
 	
 	public AOC2024_Day15() {
 		super(15);
-
 	}
 
 	@Override

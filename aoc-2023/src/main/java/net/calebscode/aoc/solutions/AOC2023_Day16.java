@@ -8,7 +8,7 @@ import java.util.Queue;
 import net.calebscode.aoc.BasicSolution;
 import net.calebscode.aoc.data.Triple;
 import net.calebscode.aoc.geometry.Point2D;
-import net.calebscode.aoc.util.ArrayUtils;
+import net.calebscode.aoc.util.Utils;
 
 public class AOC2023_Day16 extends BasicSolution<Long> {
 
@@ -19,14 +19,14 @@ public class AOC2023_Day16 extends BasicSolution<Long> {
 	@Override
 	public Long solveFirst() {
 		var layout = input.asCharArray();
-		ArrayUtils.transpose(layout);
+		Utils.transpose(layout);
 		return getTotalEnergized(layout, Triple.of(new Point2D(-1, 0), 1, 0));
 	}
 
 	@Override
 	public Long solveSecond() {
 		var layout = input.asCharArray();
-		ArrayUtils.transpose(layout);
+		Utils.transpose(layout);
 		long bestEnergy = 0;
 
 		// Check vertical entry from top or bottom

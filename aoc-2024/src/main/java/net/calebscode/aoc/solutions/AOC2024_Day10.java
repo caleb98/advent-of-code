@@ -6,7 +6,7 @@ import java.util.Set;
 import net.calebscode.aoc.BasicSolution;
 import net.calebscode.aoc.data.Grid;
 import net.calebscode.aoc.geometry.Point2D;
-import net.calebscode.aoc.util.ArrayUtils;
+import net.calebscode.aoc.util.Utils;
 
 public class AOC2024_Day10 extends BasicSolution<Long> {
 
@@ -17,7 +17,7 @@ public class AOC2024_Day10 extends BasicSolution<Long> {
 		super(10);
 		
 		var chars = input.asCharacterArray();
-		ArrayUtils.transpose(chars);
+		Utils.transpose(chars);
 		var mapData = new Integer[chars.length][];
 		
 		trailheads = new HashSet<Point2D>(); 

@@ -8,11 +8,15 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class ArrayUtils {
+public class Utils {
 	
 	public static <T> void transpose(T[][] array) {
         if (array == null || array.length == 0 || array[0].length == 0) {
             throw new IllegalArgumentException("Input array cannot be null or empty");
+        }
+        
+        if (array.length != array[0].length) {
+        	throw new IllegalArgumentException("Input array must be square");
         }
         
         int rows = array.length;
@@ -32,6 +36,10 @@ public class ArrayUtils {
             throw new IllegalArgumentException("Input array cannot be null or empty");
         }
         
+        if (array.length != array[0].length) {
+        	throw new IllegalArgumentException("Input array must be square");
+        }
+        
         int rows = array.length;
         int cols = array[0].length;
         
@@ -47,6 +55,10 @@ public class ArrayUtils {
 	public static void transpose(char[][] array) {
         if (array == null || array.length == 0 || array[0].length == 0) {
             throw new IllegalArgumentException("Input array cannot be null or empty");
+        }
+        
+        if (array.length != array[0].length) {
+        	throw new IllegalArgumentException("Input array must be square");
         }
         
         int rows = array.length;
@@ -66,6 +78,10 @@ public class ArrayUtils {
             throw new IllegalArgumentException("Input array cannot be null or empty");
         }
         
+        if (array.length != array[0].length) {
+        	throw new IllegalArgumentException("Input array must be square");
+        }
+        
         int rows = array.length;
         int cols = array[0].length;
         
@@ -79,7 +95,16 @@ public class ArrayUtils {
 	}
 	
 	public static <T> void transpose(List<List<T>> lists) {
+		if (lists == null || lists.size() == 0 || lists.get(0).size() == 0) {
+			throw new IllegalArgumentException("Input lists cannot be null or empty");
+		}		
+		
         for (int i = 0; i < lists.size(); i++) {
+        	
+        	if (lists.size() != lists.get(i).size()) {
+        		throw new IllegalArgumentException("Input list of lists must be square");
+        	}
+        	
             for (int j = i + 1; j < lists.get(i).size(); j++) {
             	
             	T temp = lists.get(i).get(j);

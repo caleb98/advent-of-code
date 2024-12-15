@@ -12,7 +12,7 @@ import java.util.Set;
 
 import net.calebscode.aoc.BasicSolution;
 import net.calebscode.aoc.geometry.Point2D;
-import net.calebscode.aoc.util.ArrayUtils;
+import net.calebscode.aoc.util.Utils;
 
 public class AOC2023_Day14 extends BasicSolution<Long> {
 
@@ -26,7 +26,7 @@ public class AOC2023_Day14 extends BasicSolution<Long> {
 
 		// Added transposing here to account for breaking change in QuestionInput api
 		var chars = input.asCharArray();
-		ArrayUtils.transpose(chars);
+		Utils.transpose(chars);
 		var dish = new Dish(chars);
 		
 		var tilted = tilt(0, -1, dish);
@@ -44,7 +44,7 @@ public class AOC2023_Day14 extends BasicSolution<Long> {
 
 		// Added transposing here to account for breaking change in QuestionInput api
 		var chars = input.asCharArray();
-		ArrayUtils.transpose(chars);
+		Utils.transpose(chars);
 		var dish = new Dish(chars);
 
 		var cycleMap = new HashMap<Dish, Dish>();

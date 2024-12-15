@@ -8,9 +8,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import net.calebscode.aoc.data.Grid;
-import net.calebscode.aoc.util.ArrayUtils;
+import net.calebscode.aoc.util.Utils;
 
 public class QuestionInput {
 
@@ -33,10 +34,6 @@ public class QuestionInput {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-	}
-	
-	public String getAllInput() {
-		return lines.stream().reduce("", (acc, val) -> acc + val);
 	}
 
 	public List<String> getLines() {
@@ -65,6 +62,18 @@ public class QuestionInput {
 		return inputs;
 	}
 	
+	public Stream<String> stream() {
+		return lines.stream();
+	}
+	
+	public Stream<String> parallelStream() {
+		return lines.parallelStream();
+	}
+	
+	public String asOneLine() {
+		return lines.stream().reduce("", (acc, val) -> acc + val);
+	}
+	
 	public Character[][] asCharacterArray() {
 		Character[][] chars = new Character[lines.size()][];
 		
@@ -73,7 +82,7 @@ public class QuestionInput {
 			chars[i] = line.chars().mapToObj(c -> (char) c).toList().toArray(new Character[line.length()]);
 		}
 		
-		ArrayUtils.transpose(chars);
+		Utils.transpose(chars);
 
 		return chars;
 	}
@@ -85,7 +94,7 @@ public class QuestionInput {
 			chars[i] = lines.get(i).toCharArray();
 		}
 		
-		ArrayUtils.transpose(chars);
+		Utils.transpose(chars);
 
 		return chars;
 	}
@@ -102,7 +111,7 @@ public class QuestionInput {
 			}
 		}
 		
-		ArrayUtils.transpose(ints);
+		Utils.transpose(ints);
 
 		return ints;
 	}
@@ -119,7 +128,7 @@ public class QuestionInput {
 			}
 		}
 		
-		ArrayUtils.transpose(ints);
+		Utils.transpose(ints);
 
 		return ints;
 	}
