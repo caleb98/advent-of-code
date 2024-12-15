@@ -14,9 +14,14 @@ import net.calebscode.aoc.util.ArrayUtils;
 
 public class QuestionInput {
 
-	private ArrayList<String> lines = new ArrayList<>();
+	private List<String> lines;
 
+	public QuestionInput(List<String> lines) {
+		this.lines = new ArrayList<>(lines);
+	}
+	
 	public QuestionInput(String resourcePath) {
+		lines = new ArrayList<String>();
 		try (
 			var inputStream = getClass().getResourceAsStream(resourcePath);
 			var reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -38,13 +43,14 @@ public class QuestionInput {
 		return Collections.unmodifiableList(lines);
 	}
 
-	public List<List<String>> getLinesSplitByBlank() {
-		List<List<String>> sections = new ArrayList<>();
-		List<String> current = new ArrayList<>();
+	public List<QuestionInput> splitByBlankLine() {
+		var inputs = new ArrayList<QuestionInput>();
+		var current = new ArrayList<String>();
+		
 		for (var line : lines) {
 			if (line.isBlank()) {
 				if (!current.isEmpty()) {
-					sections.add(current);
+					inputs.add(new QuestionInput(current));
 					current = new ArrayList<>();
 				}
 			} else {
@@ -53,10 +59,10 @@ public class QuestionInput {
 		}
 
 		if (!current.isEmpty()) {
-			sections.add(current);
+			inputs.add(new QuestionInput(current));
 		}
 
-		return sections;
+		return inputs;
 	}
 	
 	public Character[][] asCharacterArray() {

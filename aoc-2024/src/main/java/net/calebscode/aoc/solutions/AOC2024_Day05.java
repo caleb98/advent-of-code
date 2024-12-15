@@ -21,9 +21,9 @@ public class AOC2024_Day05 extends BasicSolution<Long> {
 	public AOC2024_Day05() {
 		super(5);
 		
-		var sections = input.getLinesSplitByBlank();
-		orderingRules = sections.get(0);
-		updates = sections.get(1);
+		var sections = input.splitByBlankLine();
+		orderingRules = sections.get(0).getLines();
+		updates = sections.get(1).getLines();
 		
 		after = new HashMap<Integer, Set<Integer>>();
 		before = new HashMap<Integer, Set<Integer>>();

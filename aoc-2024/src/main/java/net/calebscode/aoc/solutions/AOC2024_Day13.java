@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import net.calebscode.aoc.BasicSolution;
+import net.calebscode.aoc.QuestionInput;
 import net.calebscode.aoc.data.Pair;
 import net.calebscode.aoc.data.Quad;
 
@@ -16,7 +17,8 @@ public class AOC2024_Day13 extends BasicSolution<Long> {
 	
 	public AOC2024_Day13() {
 		super(13);
-		machines = input.getLinesSplitByBlank().parallelStream()
+		machines = input.splitByBlankLine().parallelStream()
+				.map(QuestionInput::getLines)
 				.map(this::parseClawMachine)
 				.toList();
 	}

@@ -22,12 +22,12 @@ public class AOC2023_Day19 extends BasicSolution<Long> {
 
 	@Override
 	public Long solveFirst() {
-		var sections = input.getLinesSplitByBlank();
+		var sections = input.splitByBlankLine();
 		var workflowsList = sections.get(0);
 		var partsList = sections.get(1);
 
-		var workflows = parseWorkflows(workflowsList);
-		var parts = partsList.parallelStream().map(this::parsePart).toList();
+		var workflows = parseWorkflows(workflowsList.getLines());
+		var parts = partsList.getLines().parallelStream().map(this::parsePart).toList();
 
 		return parts.stream().filter(part -> {
 				String current = "in";
@@ -43,8 +43,8 @@ public class AOC2023_Day19 extends BasicSolution<Long> {
 
 	@Override
 	public Long solveSecond() {
-		var sections = input.getLinesSplitByBlank();
-		var workflowsList = sections.get(0);
+		var sections = input.splitByBlankLine();
+		var workflowsList = sections.get(0).getLines();
 
 		var workflows = parseRangedWorkflows(workflowsList);
 		var accepted = calculateRanges(workflows, "in", new PartRange());

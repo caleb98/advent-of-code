@@ -21,11 +21,11 @@ public class AOC2024_Day15 extends BasicSolution<Long> {
 
 	@Override
 	public Long solveFirst() {
-		var data = input.getLinesSplitByBlank();
+		var data = input.splitByBlankLine();
 		
-		var movements = data.get(1).stream().collect(Collectors.joining());
+		var movements = data.get(1).getLines().stream().collect(Collectors.joining());
 
-		var roomData = data.get(0).stream()
+		var roomData = data.get(0).getLines().stream()
 				.map(line -> (List<Character>) new ArrayList<>(line.chars().mapToObj(c -> Character.valueOf((char) c)).toList()))
 				.toList();
 		
@@ -65,11 +65,11 @@ public class AOC2024_Day15 extends BasicSolution<Long> {
 
 	@Override
 	public Long solveSecond() {
-		var data = input.getLinesSplitByBlank();
+		var data = input.splitByBlankLine();
 		
-		var movements = data.get(1).stream().collect(Collectors.joining());
+		var movements = data.get(1).getLines().stream().collect(Collectors.joining());
 
-		var roomData = data.get(0).stream()
+		var roomData = data.get(0).getLines().stream()
 				.map(line -> line.chars()
 					.mapToObj(c -> (char) c)
 					.flatMap(c -> switch (c) {
