@@ -78,6 +78,18 @@ public class ArrayUtils {
         }
 	}
 	
+	public static <T> void transpose(List<List<T>> lists) {
+        for (int i = 0; i < lists.size(); i++) {
+            for (int j = i + 1; j < lists.get(i).size(); j++) {
+            	
+            	T temp = lists.get(i).get(j);
+            	lists.get(i).set(j, lists.get(j).get(i));
+            	lists.get(j).set(i, temp);
+            	
+            }
+        }
+	}
+	
 	/**
 	 * Partitions a collection of elements into sets of contiguous
 	 * like elements. The logic for determining if elements are adjacent
