@@ -178,7 +178,7 @@ public class QuestionInput {
 		return tArray;
 	}
 	
-	public <T> Grid<T> asGridFromIntegers(Function<Integer, T> converter, boolean wrap) {
+	public <T> Grid<T> asGridFromIntegers(Function<Integer, T> converter, boolean wrap, boolean expand) {
 		var tArray = convertIntegerArray(converter);		
 		return new Grid<T>(tArray, wrap);
 	}
@@ -189,11 +189,11 @@ public class QuestionInput {
 		return new Grid<T>(tArray, wrap, outOfBoundsSupplier);
 	}
 	
-	public Grid<Character> asCharacterGrid(boolean wrap) {
+	public Grid<Character> asCharacterGrid(boolean wrap, boolean expand) {
 		return new Grid<Character>(asCharacterArray(), wrap);
 	}
 	
-	public Grid<Character> asCharacterGrid(boolean wrap, BiFunction<Integer, Integer, Character> outOfBoundsSupplier) {
+	public Grid<Character> asCharacterGrid(boolean wrap, boolean expand, BiFunction<Integer, Integer, Character> outOfBoundsSupplier) {
 		return new Grid<Character>(asCharacterArray(), wrap, outOfBoundsSupplier);
 	}
 

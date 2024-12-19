@@ -1,11 +1,13 @@
 package net.calebscode.aoc;
 
-import net.calebscode.aoc.solutions.AOC2024_Day16;
+import java.io.IOException;
+
+import net.calebscode.aoc.solutions.AOC2024_Day18;
 
 public class AOC2024 {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
-		new AOC2024_Day16().run();
+		new AOC2024_Day18().run();
 
 	}
 }

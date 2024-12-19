@@ -17,7 +17,7 @@ public class AOC2024_Day16 extends BasicSolution<Long> {
 	
 	@Override
 	public Long solveFirst() {
-		Grid<Character> maze = input.asCharacterGrid(false);
+		Grid<Character> maze = input.asCharacterGrid(false, false);
 		
 		var pathfinder = new DijkstraPathfinder<State>(
 			state -> getNextStates(state, maze),
@@ -33,7 +33,7 @@ public class AOC2024_Day16 extends BasicSolution<Long> {
 
 	@Override
 	public Long solveSecond() {
-		Grid<Character> maze = input.asCharacterGrid(false);
+		Grid<Character> maze = input.asCharacterGrid(false, false);
 		
 		var pathfinder = new DijkstraPathfinder<State>(
 			state -> getNextStates(state, maze),

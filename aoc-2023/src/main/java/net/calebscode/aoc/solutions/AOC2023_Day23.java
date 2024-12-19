@@ -17,7 +17,7 @@ public class AOC2023_Day23 extends BasicSolution<Long> {
 	
 	public AOC2023_Day23() {
 		super(23);
-		grid = input.asCharacterGrid(false, (x, y) -> '#');
+		grid = input.asCharacterGrid(false, false, Grid.outOfBounds(), (x, y) -> '#');
 	}
 	
 	@Override

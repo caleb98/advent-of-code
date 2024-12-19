@@ -16,7 +16,7 @@ public class AOC2024_Day08 extends BasicSolution<Long> {
 	
 	public AOC2024_Day08() {
 		super(8);
-		nodeMap = input.asCharacterGrid(false);
+		nodeMap = input.asCharacterGrid(false, false);
 	}
 	
 	@Override

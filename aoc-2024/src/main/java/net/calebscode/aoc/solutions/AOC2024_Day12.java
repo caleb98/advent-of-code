@@ -19,7 +19,7 @@ public class AOC2024_Day12 extends BasicSolution<Long> {
 	
 	public AOC2024_Day12() {
 		super(12);
-		garden = input.asCharacterGrid(false, (x, y) -> '.');
+		garden = input.asCharacterGrid(false, false, (x, y) -> '.');
 		
 		var allPoints = new HashSet<Point2D>();
 		for (int x = 0; x < garden.getWidth(); x++) {

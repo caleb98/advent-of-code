@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.BiFunction;
@@ -37,7 +38,7 @@ public class DijkstraPathfinder<T> {
 	 */
 	public DijkstraPath pathfindLongest(Iterable<T> startNodes) {
 		var totalCosts = new HashMap<T, Integer>();
-		var bestPaths = new HashMap<T, T>();
+		var worstPaths = new HashMap<T, T>();
 		var visited = new HashSet<T>();
 		var unvisited = new TreeSet<T>(createSorter(totalCosts));
 
@@ -62,9 +63,9 @@ public class DijkstraPathfinder<T> {
 				var totalCostToAdjacent = currentTotalCost + transitionCost;
 				var prevTotalCostToAdjacent = totalCosts.getOrDefault(node, Integer.MAX_VALUE);
 
-				if (totalCostToAdjacent < prevTotalCostToAdjacent) {
+				if (totalCostToAdjacent > prevTotalCostToAdjacent) {
 					totalCosts.put(node, totalCostToAdjacent);
-					bestPaths.put(node, current);
+					worstPaths.put(node, current);
 				}
 			}
 
@@ -73,33 +74,33 @@ public class DijkstraPathfinder<T> {
 		}
 
 		// Collect the end nodes
-		var endNodes= visited.parallelStream()
+		var endNodes = visited.parallelStream()
 						.filter(node -> isTerminalState.test(node))
 						.toList();
 
-		// Find the best end node with the lowest cost
-		T bestEndpoint = null;
+		// Find the worst end node with the highest cost
+		T worstEndpoint = null;
 		int highestCost = Integer.MIN_VALUE;
 
 		for (var endpoint : endNodes) {
 			int endpointCost = totalCosts.get(endpoint);
 
 			if (highestCost < endpointCost) {
-				bestEndpoint = endpoint;
+				worstEndpoint = endpoint;
 				highestCost = endpointCost;
 			}
 		}
 
-		// Construct the shortest path using the best endpoint
+		// Construct the longest path
 		var path = new LinkedList<T>();
-		current = bestEndpoint;
+		current = worstEndpoint;
 		while (totalCosts.get(current) != 0) {
 			path.addFirst(current);
-			current = bestPaths.get(current);
+			current = worstPaths.get(current);
 		}
 		path.addFirst(current); // Add the starting node
 
-		return new DijkstraPath(totalCosts.get(bestEndpoint), path);
+		return new DijkstraPath(totalCosts.get(worstEndpoint), path);
 	}
 
 	/**
@@ -111,7 +112,7 @@ public class DijkstraPathfinder<T> {
 		var totalCosts = new HashMap<T, Integer>();
 		var bestPaths = new HashMap<T, T>();
 		var visited = new HashSet<T>();
-		var unvisited = new TreeSet<T>(createSorter(totalCosts));
+		var unvisited = new PriorityQueue<T>(createSorter(totalCosts));
 
 		for (var node : startNodes) {
 			totalCosts.put(node, 0);
@@ -120,28 +121,29 @@ public class DijkstraPathfinder<T> {
 
 		T current;
 		while (!unvisited.isEmpty()) {
-			current = unvisited.removeFirst();
+			current = unvisited.poll();
+			if (visited.contains(current)) continue;
+			visited.add(current);
 
 			var currentTotalCost = totalCosts.get(current);
 			var adjacentNodes = getAdjacent.apply(current).stream()
 									.filter(n -> !visited.contains(n))
 									.toList();
 
-			for (var node : adjacentNodes) {
-				unvisited.remove(node);
-				var transitionCost = getTransitionCost.apply(current, node);
+			for (var adjacentNode : adjacentNodes) {
+				//unvisited.remove(node);
+				var transitionCost = getTransitionCost.apply(current, adjacentNode);
 
 				var totalCostToAdjacent = currentTotalCost + transitionCost;
-				var prevTotalCostToAdjacent = totalCosts.getOrDefault(node, Integer.MAX_VALUE);
+				var prevTotalCostToAdjacent = totalCosts.getOrDefault(adjacentNode, Integer.MAX_VALUE);
 
 				if (totalCostToAdjacent < prevTotalCostToAdjacent) {
-					totalCosts.put(node, totalCostToAdjacent);
-					bestPaths.put(node, current);
+					totalCosts.put(adjacentNode, totalCostToAdjacent);
+					bestPaths.put(adjacentNode, current);
 				}
 			}
 
 			unvisited.addAll(adjacentNodes);
-			visited.add(current);
 		}
 
 		// Collect the end nodes
@@ -160,6 +162,11 @@ public class DijkstraPathfinder<T> {
 				bestEndpoint = endpoint;
 				lowestCost = endpointCost;
 			}
+		}
+		
+		// No path
+		if (bestEndpoint == null) {
+			return new DijkstraPath(-1, new ArrayList<>(visited));
 		}
 
 		// Construct the shortest path using the best endpoint
@@ -185,7 +192,7 @@ public class DijkstraPathfinder<T> {
 		var totalCosts = new HashMap<T, Integer>();
 		var bestPaths = new HashMap<T, Set<T>>();
 		var visited = new HashSet<T>();
-		var unvisited = new TreeSet<T>(createSorter(totalCosts));
+		var unvisited = new PriorityQueue<T>(createSorter(totalCosts));
 
 		for (var node : startNodes) {
 			totalCosts.put(node, 0);
@@ -194,7 +201,9 @@ public class DijkstraPathfinder<T> {
 
 		T current;
 		while (!unvisited.isEmpty()) {
-			current = unvisited.removeFirst();
+			current = unvisited.poll();
+			if (visited.contains(current)) continue;
+			visited.add(current);
 
 			var currentTotalCost = totalCosts.get(current);
 			var adjacentNodes = getAdjacent.apply(current).stream()
@@ -202,7 +211,6 @@ public class DijkstraPathfinder<T> {
 									.toList();
 
 			for (var node : adjacentNodes) {
-				unvisited.remove(node);
 				var transitionCost = getTransitionCost.apply(current, node);
 
 				var totalCostToAdjacent = currentTotalCost + transitionCost;
@@ -221,7 +229,6 @@ public class DijkstraPathfinder<T> {
 			}
 
 			unvisited.addAll(adjacentNodes);
-			visited.add(current);
 		}
 
 		// Collect the end nodes
