@@ -10,7 +10,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import net.calebscode.aoc.data.Grid;
+import net.calebscode.aoc.data.MapGrid;
 import net.calebscode.aoc.util.Utils;
 
 public class QuestionInput {
@@ -150,15 +150,15 @@ public class QuestionInput {
 		return tArray;
 	}
 	
-	public <T> Grid<T> asGridFromCharacters(Function<Character, T> converter, boolean wrap) {
+	public <T> MapGrid<T> asGridFromCharacters(Function<Character, T> converter, boolean wrap) {
 		var tArray = convertCharacterArray(converter);		
-		return new Grid<T>(tArray, wrap);
+		return new MapGrid<T>(tArray, wrap);
 	}
 
 	
-	public <T> Grid<T> asGridFromCharacters(Function<Character, T> converter, boolean wrap, BiFunction<Integer, Integer, T> outOfBoundsSupplier) {
+	public <T> MapGrid<T> asGridFromCharacters(Function<Character, T> converter, boolean wrap, BiFunction<Integer, Integer, T> outOfBoundsSupplier) {
 		var tArray = convertCharacterArray(converter);
-		return new Grid<T>(tArray, wrap, outOfBoundsSupplier);
+		return new MapGrid<T>(tArray, wrap, outOfBoundsSupplier);
 	}
 	
 	private <T> T[][] convertIntegerArray(Function<Integer, T> converter) {
@@ -178,31 +178,31 @@ public class QuestionInput {
 		return tArray;
 	}
 	
-	public <T> Grid<T> asGridFromIntegers(Function<Integer, T> converter, boolean wrap, boolean expand) {
+	public <T> MapGrid<T> asGridFromIntegers(Function<Integer, T> converter, boolean wrap, boolean expand) {
 		var tArray = convertIntegerArray(converter);		
-		return new Grid<T>(tArray, wrap);
+		return new MapGrid<T>(tArray, wrap);
 	}
 
 	
-	public <T> Grid<T> asGridFromIntegers(Function<Integer, T> converter, boolean wrap, BiFunction<Integer, Integer, T> outOfBoundsSupplier) {
+	public <T> MapGrid<T> asGridFromIntegers(Function<Integer, T> converter, boolean wrap, BiFunction<Integer, Integer, T> outOfBoundsSupplier) {
 		var tArray = convertIntegerArray(converter);
-		return new Grid<T>(tArray, wrap, outOfBoundsSupplier);
+		return new MapGrid<T>(tArray, wrap, outOfBoundsSupplier);
 	}
 	
-	public Grid<Character> asCharacterGrid(boolean wrap, boolean expand) {
-		return new Grid<Character>(asCharacterArray(), wrap);
+	public MapGrid<Character> asCharacterGrid(boolean wrap, boolean expand) {
+		return new MapGrid<Character>(asCharacterArray(), wrap);
 	}
 	
-	public Grid<Character> asCharacterGrid(boolean wrap, boolean expand, BiFunction<Integer, Integer, Character> outOfBoundsSupplier) {
-		return new Grid<Character>(asCharacterArray(), wrap, outOfBoundsSupplier);
+	public MapGrid<Character> asCharacterGrid(boolean wrap, boolean expand, BiFunction<Integer, Integer, Character> outOfBoundsSupplier) {
+		return new MapGrid<Character>(asCharacterArray(), wrap, outOfBoundsSupplier);
 	}
 
-	public Grid<Integer> asIntegerGrid(boolean wrap) {
-		return new Grid<Integer>(asIntegerArray(), wrap);
+	public MapGrid<Integer> asIntegerGrid(boolean wrap) {
+		return new MapGrid<Integer>(asIntegerArray(), wrap);
 	}
 	
-	public Grid<Integer> asIntegerGrid(boolean wrap, BiFunction<Integer, Integer, Integer> outOfBoundsSupplier) {
-		return new Grid<Integer>(asIntegerArray(), wrap, outOfBoundsSupplier);
+	public MapGrid<Integer> asIntegerGrid(boolean wrap, BiFunction<Integer, Integer, Integer> outOfBoundsSupplier) {
+		return new MapGrid<Integer>(asIntegerArray(), wrap, outOfBoundsSupplier);
 	}
 	
 }

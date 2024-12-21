@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import net.calebscode.aoc.BasicSolution;
-import net.calebscode.aoc.data.Grid;
+import net.calebscode.aoc.data.MapGrid;
 import net.calebscode.aoc.data.OrthogonalDirection;
 import net.calebscode.aoc.geometry.Point2D;
 import net.calebscode.aoc.pathfinding.DijkstraPathfinder;
@@ -17,7 +17,7 @@ public class AOC2024_Day16 extends BasicSolution<Long> {
 	
 	@Override
 	public Long solveFirst() {
-		Grid<Character> maze = input.asCharacterGrid(false, false);
+		MapGrid<Character> maze = input.asCharacterGrid(false, false);
 		
 		var pathfinder = new DijkstraPathfinder<State>(
 			state -> getNextStates(state, maze),
@@ -25,7 +25,7 @@ public class AOC2024_Day16 extends BasicSolution<Long> {
 			state -> isTerminalState(state, maze)
 		);
 		
-		var startNodes = maze.getAllPointsWhere(c -> c == 'S').stream().map(pos -> new State(pos, OrthogonalDirection.RIGHT)).toList();
+		var startNodes = maze.getPointsWhere(c -> c == 'S').stream().map(pos -> new State(pos, OrthogonalDirection.RIGHT)).toList();
 		var result = pathfinder.pathfind(startNodes);
 		
 		return (long) result.getTotalCost();
@@ -33,7 +33,7 @@ public class AOC2024_Day16 extends BasicSolution<Long> {
 
 	@Override
 	public Long solveSecond() {
-		Grid<Character> maze = input.asCharacterGrid(false, false);
+		MapGrid<Character> maze = input.asCharacterGrid(false, false);
 		
 		var pathfinder = new DijkstraPathfinder<State>(
 			state -> getNextStates(state, maze),
@@ -41,7 +41,7 @@ public class AOC2024_Day16 extends BasicSolution<Long> {
 			state -> isTerminalState(state, maze)
 		);
 		
-		var startNodes = maze.getAllPointsWhere(c -> c == 'S').stream().map(pos -> new State(pos, OrthogonalDirection.RIGHT)).toList();
+		var startNodes = maze.getPointsWhere(c -> c == 'S').stream().map(pos -> new State(pos, OrthogonalDirection.RIGHT)).toList();
 		var allPaths = pathfinder.pathfindAllBest(startNodes);
 		
 		var pointsOnBestPaths = new HashSet<Point2D>();
@@ -67,7 +67,7 @@ public class AOC2024_Day16 extends BasicSolution<Long> {
 		return (long) pointsOnBestPaths.size();
 	}
 	
-	private List<State> getNextStates(State current, Grid<Character> maze) {
+	private List<State> getNextStates(State current, MapGrid<Character> maze) {
 		var turnLeft = new State(current.pos, current.facing.counterClockwise());
 		var turnRight = new State(current.pos, current.facing.clockwise());
 		var forward = new State(current.pos.moveForward(current.facing), current.facing);
@@ -84,7 +84,7 @@ public class AOC2024_Day16 extends BasicSolution<Long> {
 		return current.facing == next.facing ? 1 : 1000;
 	}
 	
-	private boolean isTerminalState(State state, Grid<Character> maze) {
+	private boolean isTerminalState(State state, MapGrid<Character> maze) {
 		return maze.get(state.pos) == 'E';
 	}
 	

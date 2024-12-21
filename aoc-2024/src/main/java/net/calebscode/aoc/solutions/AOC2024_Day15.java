@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 import net.calebscode.aoc.BasicSolution;
 import net.calebscode.aoc.data.Grid;
+import net.calebscode.aoc.data.MapGrid;
 import net.calebscode.aoc.data.OrthogonalDirection;
 import net.calebscode.aoc.geometry.Point2D;
 
@@ -28,24 +29,21 @@ public class AOC2024_Day15 extends BasicSolution<Long> {
 				.map(line -> (List<Character>) new ArrayList<>(line.chars().mapToObj(c -> Character.valueOf((char) c)).toList()))
 				.toList();
 		
-		var columns = new ArrayList<List<Character>>();
+		var transposedRoomData = new Character[roomData.get(0).size()][];
 		for (int row = 0; row < roomData.size(); row++) {
 			for (int col = 0; col < roomData.get(row).size(); col++) {
-				while (columns.size() <= col) columns.add(new ArrayList<Character>());
-				columns.get(col).add(roomData.get(row).get(col));
+				transposedRoomData[col][row] = roomData.get(row).get(col);
 			}
 		}
 		
-		roomData = columns;
-		
-		var baseRoom = new Grid<>(roomData, false);
-		var room = baseRoom.mapElements(c -> switch (c) {
+		var baseRoom = new MapGrid<>(transposedRoomData, false);
+		var room = baseRoom.mapByValue(c -> switch (c) {
 			case 'O', '@' -> '.';
 			default -> c;
 		});
 		
-		var boxes = baseRoom.getAllPointsWhere(c -> c == 'O');
-		var robot = baseRoom.getAllPointsWhere(c -> c == '@').iterator().next();
+		var boxes = baseRoom.getPointsWhere(c -> c == 'O');
+		var robot = baseRoom.getPointsWhere(c -> c == '@').iterator().next();
 		
 		System.out.println("Begin:");
 		printRoom(robot, boxes, room);
@@ -82,24 +80,21 @@ public class AOC2024_Day15 extends BasicSolution<Long> {
 				)
 				.toList();
 		
-		var columns = new ArrayList<List<Character>>();
+		var transposedRoomData = new Character[roomData.get(0).size()][];
 		for (int row = 0; row < roomData.size(); row++) {
 			for (int col = 0; col < roomData.get(row).size(); col++) {
-				while (columns.size() <= col) columns.add(new ArrayList<Character>());
-				columns.get(col).add(roomData.get(row).get(col));
+				transposedRoomData[col][row] = roomData.get(row).get(col);
 			}
 		}
 		
-		roomData = columns;
-		
-		var baseRoom = new Grid<>(roomData, false);
-		var room = baseRoom.mapElements(c -> switch (c) {
+		var baseRoom = new MapGrid<>(transposedRoomData, false);
+		var room = baseRoom.mapByValue(c -> switch (c) {
 			case '[', ']', '@' -> '.';
 			default -> c;
 		});
 		
-		var boxes = baseRoom.getAllPointsWhere(c -> c == '[');
-		var robot = baseRoom.getAllPointsWhere(c -> c == '@').iterator().next();
+		var boxes = baseRoom.getPointsWhere(c -> c == '[');
+		var robot = baseRoom.getPointsWhere(c -> c == '@').iterator().next();
 		
 		System.out.println("Begin:");
 		printRoomDoubled(robot, boxes, room);

@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -29,78 +28,6 @@ public class DijkstraPathfinder<T> {
 		this.getAdjacent = getAdjacent;
 		this.getTransitionCost = getTransitionCost;
 		this.isTerminalState = isTerminalState;
-	}
-	
-	/**
-	 * DOESNT WORK CURRENTLY, WIP FOR AOC 2023 Day 23
-	 * @param startNodes
-	 * @return
-	 */
-	public DijkstraPath pathfindLongest(Iterable<T> startNodes) {
-		var totalCosts = new HashMap<T, Integer>();
-		var worstPaths = new HashMap<T, T>();
-		var visited = new HashSet<T>();
-		var unvisited = new TreeSet<T>(createSorter(totalCosts));
-
-		for (var node : startNodes) {
-			totalCosts.put(node, 0);
-			unvisited.add(node);
-		}
-
-		T current;
-		while (!unvisited.isEmpty()) {
-			current = unvisited.removeFirst();
-
-			var currentTotalCost = totalCosts.get(current);
-			var adjacentNodes = getAdjacent.apply(current).stream()
-									.filter(n -> !visited.contains(n))
-									.toList();
-
-			for (var node : adjacentNodes) {
-				unvisited.remove(node);
-				var transitionCost = getTransitionCost.apply(current, node);
-
-				var totalCostToAdjacent = currentTotalCost + transitionCost;
-				var prevTotalCostToAdjacent = totalCosts.getOrDefault(node, Integer.MAX_VALUE);
-
-				if (totalCostToAdjacent > prevTotalCostToAdjacent) {
-					totalCosts.put(node, totalCostToAdjacent);
-					worstPaths.put(node, current);
-				}
-			}
-
-			unvisited.addAll(adjacentNodes);
-			visited.add(current);
-		}
-
-		// Collect the end nodes
-		var endNodes = visited.parallelStream()
-						.filter(node -> isTerminalState.test(node))
-						.toList();
-
-		// Find the worst end node with the highest cost
-		T worstEndpoint = null;
-		int highestCost = Integer.MIN_VALUE;
-
-		for (var endpoint : endNodes) {
-			int endpointCost = totalCosts.get(endpoint);
-
-			if (highestCost < endpointCost) {
-				worstEndpoint = endpoint;
-				highestCost = endpointCost;
-			}
-		}
-
-		// Construct the longest path
-		var path = new LinkedList<T>();
-		current = worstEndpoint;
-		while (totalCosts.get(current) != 0) {
-			path.addFirst(current);
-			current = worstPaths.get(current);
-		}
-		path.addFirst(current); // Add the starting node
-
-		return new DijkstraPath(totalCosts.get(worstEndpoint), path);
 	}
 
 	/**

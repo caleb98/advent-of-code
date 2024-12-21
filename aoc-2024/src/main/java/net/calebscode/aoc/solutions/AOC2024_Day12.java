@@ -7,14 +7,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import net.calebscode.aoc.BasicSolution;
-import net.calebscode.aoc.data.Grid;
+import net.calebscode.aoc.data.MapGrid;
 import net.calebscode.aoc.data.Pair;
 import net.calebscode.aoc.geometry.Point2D;
 import net.calebscode.aoc.util.Utils;
 
 public class AOC2024_Day12 extends BasicSolution<Long> {
 
-	private Grid<Character> garden;
+	private MapGrid<Character> garden;
 	private List<Set<Point2D>> plots = new ArrayList<>();
 	
 	public AOC2024_Day12() {

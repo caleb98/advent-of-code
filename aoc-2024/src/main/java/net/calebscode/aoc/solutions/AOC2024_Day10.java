@@ -4,13 +4,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.calebscode.aoc.BasicSolution;
-import net.calebscode.aoc.data.Grid;
+import net.calebscode.aoc.data.MapGrid;
 import net.calebscode.aoc.geometry.Point2D;
 import net.calebscode.aoc.util.Utils;
 
 public class AOC2024_Day10 extends BasicSolution<Long> {
 
-	private Grid<Integer> map;
+	private MapGrid<Integer> map;
 	private Set<Point2D> trailheads;
 	
 	public AOC2024_Day10() {
@@ -31,7 +31,7 @@ public class AOC2024_Day10 extends BasicSolution<Long> {
 			}
 		}
 		
-		map = new Grid<>(mapData, false, (x, y) -> -1);
+		map = new MapGrid<>(mapData, false, (x, y) -> -1);
 	}
 	
 	@Override

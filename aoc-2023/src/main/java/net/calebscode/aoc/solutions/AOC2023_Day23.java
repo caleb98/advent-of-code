@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import net.calebscode.aoc.BasicSolution;
-import net.calebscode.aoc.data.Grid;
+import net.calebscode.aoc.data.MapGrid;
 import net.calebscode.aoc.data.OrthogonalDirection;
 import net.calebscode.aoc.data.Pair;
 import net.calebscode.aoc.geometry.Point2D;
@@ -13,11 +13,11 @@ import net.calebscode.aoc.pathfinding.DijkstraPathfinder;
 
 public class AOC2023_Day23 extends BasicSolution<Long> {
 
-	private Grid<Character> grid;
+	private MapGrid<Character> grid;
 	
 	public AOC2023_Day23() {
 		super(23);
-		grid = input.asCharacterGrid(false, false, Grid.outOfBounds(), (x, y) -> '#');
+		grid = input.asCharacterGrid(false, false, MapGrid.outOfBounds(), (x, y) -> '#');
 	}
 	
 	@Override

@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Set;
 
 import net.calebscode.aoc.BasicSolution;
-import net.calebscode.aoc.data.Grid;
+import net.calebscode.aoc.data.MapGrid;
 import net.calebscode.aoc.geometry.Point2D;
 
 public class AOC2024_Day08 extends BasicSolution<Long> {
 
-	private Grid<Character> nodeMap;
+	private MapGrid<Character> nodeMap;
 	
 	public AOC2024_Day08() {
 		super(8);
